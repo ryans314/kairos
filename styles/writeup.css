@@ -1,0 +1,24 @@
+body {
+  background-color: #bbbbbb;
+}
+
+h1 {
+  text-align: center;
+}
+
+p,
+li {
+  line-height: 1.5lh;
+  font-size: 110%;
+}
+
+section {
+  max-width: 80ch;
+  padding: 1em;
+  padding-top: 0.25em;
+  padding-bottom: 0.5em;
+  margin-bottom: 2lh;
+  box-shadow: 1px 1px 5px black;
+  border-radius: 3px;
+  border: none;
+}

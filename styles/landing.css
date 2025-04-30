@@ -1,0 +1,22 @@
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  height: 95vh;
+  width: 95vw;
+}
+h1 {
+  display: block;
+  text-align: center;
+  font-size: 4em;
+}
+button {
+  display: block;
+  font-size: 2em;
+  border-radius: 20px;
+  width: 50%;
+  height: 2lh;
+  background-color: #b8b9ee;
+}

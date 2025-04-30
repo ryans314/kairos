@@ -1,1 +1,169 @@
-<h1>Hello world!</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App hw10</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.js",
+          "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@0.6.4/dist/browser/index.js",
+          "@graffiti-garden/implementation-remote": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-remote@0.6.2/dist/browser/index.js",
+          "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <span>
+          <image class="icon" src="assets/profile.png"></image>
+          <h1>Kairos</h1>
+        </span>
+        <button @click="$graffiti.logout($graffitiSession.value)" id="logout">Log Out</button>
+      </header>
+      <main>
+        <graffiti-discover
+          v-slot="{ objects: groupChatObjects, isInitialPolling }"
+          :channels="['designftw']"
+          :schema='{
+        "properties": {
+          "value": {
+            "required": ["activity", "object"],
+            "properties": {
+              "activity": {"type": "string"},
+              "object": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "Group Chat"
+                  },
+                  "name": {"type": "string"},
+                  "channel": {"type": "string"},
+                  "members": {
+                    "type": "array",
+                    "contains": {"const": this.$graffitiSession.value.actor}
+                  }
+                },
+                "required": ["type", "name", "channel", "members"]
+              }
+            }
+          }
+        }
+      }'
+        >
+          <!-- {{groupChatObjects}} -->
+          <div id="groupContainer">
+            <div
+              class="groupCard"
+              v-for="(group, i) of groupChatObjects.sort((a, b) => b.lastModified - a.lastModified)"
+              @click="openGroup(group)"
+            >
+              <div class="groupIcon">
+                <img class="icon" src="assets/group.png" />
+              </div>
+              <div class="mainGroupSection">
+                <h3>{{group.value.object.name}}</h3>
+                <p>User: Preview Text!</p>
+              </div>
+              <div class="groupMetaInfo">
+                <p></p>
+                <p>9:07am</p>
+              </div>
+            </div>
+          </div>
+        </graffiti-discover>
+        <button class="createButton" id="newGroup" @click="openCreateGroup()"></button>
+      </main>
+      <footer>
+        <div id="groupsTab">Groups</div>
+        <div id="eventsTab">Events</div>
+        <div id="availabilityTab">My Availability</div>
+      </footer>
+      <div id="backgroundCover">
+        <div id="newGroupFrame">
+          <button class="closeButton" @click="closeCreateGroup()">X</button>
+          <h2>Create New Group</h2>
+          <form @submit.prevent="createGroup">
+            <label for="name">
+              <input
+                type="string"
+                id="groupName"
+                v-model="newGroupName"
+                placeholder="Group Name (required)"
+                autofocus
+              />
+            </label>
+            <h3>Add Members:</h3>
+            <graffiti-discover
+              v-slot="{ objects: groupChatObjects}"
+              :channels="['designftw']"
+              :schema='{
+                  "properties": {
+                    "value": {
+                      "required": ["activity", "object"],
+                      "properties": {
+                        "activity": {"type": "string"},
+                        "object": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "Group Chat"
+                            },
+                            "name": {"type": "string"},
+                            "channel": {"type": "string"},
+                            "members": {
+                              "type": "array",
+                              "contains": {"const": $graffitiSession.value.actor}
+                            }
+                          },
+                          "required": ["type", "name", "channel", "members"]
+                        }
+                      }
+                    }
+                  }
+                }'
+            >
+              <p>Suggested:</p>
+              <div v-for="user of getMembers(groupChatObjects)">
+                <input type="checkbox" :id="user" name="members" :value="user" v-model="selectedUsers" />
+                <label :for="user">{{user}}</label>
+              </div>
+
+              <!-- <div>
+                <input type="checkbox" id="check0" name="members" v-model="manualUsers[i]" />
+                <input type="text" v-model="checkboxes[0]" />
+                <label for="check0"></label>
+              </div> -->
+
+              <!-- <div v-for="(user, i) in manualUsers">
+                <input type="checkbox" :id="'manual-'+i" name="members" :value="user" v-model="selectedUsers" />
+                <input type="text" v-model="manualUsers[i]" />
+                <label :for="'manual-'+i">{{user}}</label>
+              </div> -->
+
+              <!-- {{selectedUsers}} -->
+            </graffiti-discover>
+            <p>Other Members:</p>
+            <div>
+              <input type="text" v-model="memberToAdd" @keydown.enter.prevent="selectMember" />
+              <button type="button" @click="selectMember()">Add member</button>
+            </div>
+
+            <input type="submit" />
+          </form>
+
+          <!-- <label>Group Name: <input type="text" v-model="groupName"/> </label> -->
+        </div>
+      </div>
+    </div>
+
+    <script src="index.js" type="module"></script>
+  </body>
+</html>

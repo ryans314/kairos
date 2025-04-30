@@ -1,0 +1,79 @@
+footer form {
+  width: 95%;
+}
+footer fieldset {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border: none;
+}
+#messageBar {
+  flex-grow: 1;
+  height: 2lh;
+  border-radius: 50px;
+  border: none;
+  margin-right: 2em;
+  padding-left: 1.5em;
+}
+
+#messageFrame {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 4lh;
+}
+.messageBody {
+  background-color: #b8b9ee;
+  border-radius: 15px;
+  border: none;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  word-wrap: break-word;
+  min-width: 10em;
+  max-width: min(60ch, 60%);
+  justify-content: space-between;
+  /* background-color: white; */
+  margin-bottom: 2lh;
+}
+
+.sender {
+  z-index: -10;
+  margin-bottom: -5px;
+  margin-inline-start: 2px;
+  /* background-color: red; */
+  line-height: 0.5em;
+}
+.messageContainer .messageContent {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.messageBody .messageTime {
+  z-index: 100;
+  text-align: end;
+  padding-right: 1em;
+}
+
+.messageContainer .controlButtons {
+  flex-basis: 0;
+  flex-grow: 0.1;
+}
+
+.ownMessage {
+  display: flex;
+  justify-content: flex-end;
+  /* align-self: f/lex-end; */
+}
+
+.ownMessage .sender {
+  text-align: end;
+  margin-inline-end: 2px;
+}
+.ownMessage .controlButtons {
+  display: flex;
+  justify-content: flex-end;
+}

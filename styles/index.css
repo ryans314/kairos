@@ -1,0 +1,95 @@
+header span {
+  display: flex;
+  align-items: center;
+}
+
+#logout {
+  justify-self: flex-end;
+}
+
+.groupCard {
+  width: 90%;
+  max-width: 100ch;
+  height: 10em;
+  background-color: #aaaaaa;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  margin-bottom: 1lh;
+  border-radius: 1em;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 1px 1px 5px black;
+}
+
+.groupCard:hover {
+  background-color: #bbbbbb;
+  cursor: pointer;
+}
+.groupCard * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.groupIcon {
+  flex-grow: 0.1;
+}
+.mainGroupSection {
+  flex-grow: 0.8;
+}
+.mainGroupSection {
+  justify-content: flex-start;
+}
+.groupMetaInfo {
+  flex-grow: 0.1;
+  text-align: center;
+}
+
+#groupContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+footer div {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#backgroundCover {
+  display: none;
+}
+
+.creating #backgroundCover {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.creating #newGroupFrame {
+  width: 90%;
+  height: 70vh;
+  max-width: 700px;
+  background-color: #bbbbbb;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 1px 10px black;
+  padding: 1em;
+}
+
+#newGroupFrame #groupName {
+  height: 1.5lh;
+  font-size: 1.5em;
+  background-color: inherit;
+  border: none;
+  border-bottom: 2px solid black;
+}
+
+.closeButton {
+  margin-left: 95%;
+}
