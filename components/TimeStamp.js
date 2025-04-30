@@ -19,8 +19,8 @@ export const TimeStamp = defineAsyncComponent(async () => ({
      * @param {*} object message or group object that's passed in
      * @param {*} type "message" or "group", indicating the type of object the time is for
      */
-    async updateTime(object, type) {
-      //console.log("starting updateTime");
+    async updateMessage(object, type) {
+      //console.log("starting updateMessage");
       if (object === undefined) {
         throw new Error("Object should not be undefined");
       }
@@ -57,7 +57,7 @@ export const TimeStamp = defineAsyncComponent(async () => ({
       } else {
         throw new Error("type ", this.type, " is not supported");
       }
-      //console.log("ending updateTime()");
+      //console.log("ending updateMessage()");
     },
     /**
      * Calculate the time since this.message was sent, and return a formatted string based on that.
@@ -67,9 +67,9 @@ export const TimeStamp = defineAsyncComponent(async () => ({
      * If the message was sent less than a day ago, return number of hours
      * Otherwise return the date
      */
-    displayValue() {
+    displayTime() {
       //console.log("starting display");
-      if (this.message === undefined) throw new Error("Error in displayValue - message is undefined");
+      if (this.message === undefined) throw new Error("Error in displayTime - message is undefined");
       if (this.message === 0) {
         return "no messages yet";
       }
@@ -88,7 +88,7 @@ export const TimeStamp = defineAsyncComponent(async () => ({
       if (diff < 60 * 60) {
         return Math.floor(diff / 60).toString() + "m";
       }
-      return sendDate.toLocaleString(undefined, {
+      this.timeToDisplay = sendDate.toLocaleString(undefined, {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
@@ -96,16 +96,16 @@ export const TimeStamp = defineAsyncComponent(async () => ({
     },
   },
   async created() {
-    this.updateTime(this.object, this.type).then(() => {
-      this.timeToDisplay = this.displayValue();
+    this.updateMessage(this.object, this.type).then(() => {
+      this.displayTime();
     });
 
-    //update once every 10 seconds
+    //update once every second
     setInterval(() => {
-      this.updateTime(this.object, this.type).then(() => {
-        this.timeToDisplay = this.displayValue();
-      }, 10000);
-    });
+      this.updateMessage(this.object, this.type).then(() => {
+        this.displayTime();
+      });
+    }, 1000);
   },
   template: await fetch("./components/TimeStamp.html").then((res) => res.text()),
 }));
