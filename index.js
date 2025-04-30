@@ -2,8 +2,9 @@ import { createApp } from "vue";
 import { GraffitiLocal } from "@graffiti-garden/implementation-local";
 import { GraffitiRemote } from "@graffiti-garden/implementation-remote";
 import { GraffitiPlugin } from "@graffiti-garden/wrapper-vue";
-
-createApp({
+import { UserImage } from "./components/UserImage.js";
+import { TimeStamp } from "./components/TimeStamp.js";
+const app = createApp({
   data() {
     return {
       myMessage: "",
@@ -16,6 +17,7 @@ createApp({
       memberToAdd: "",
       selectedUsers: [],
       manualUsers: [""],
+      mostRecentMessages: {},
     };
   },
   async mounted() {
@@ -47,6 +49,8 @@ createApp({
       await this.$graffiti.put(
         {
           value: {
+            activity: "create",
+            type: "Message",
             content: this.myMessage,
             published: Date.now(),
           },
@@ -167,4 +171,6 @@ createApp({
     graffiti: new GraffitiLocal(),
     // graffiti: new GraffitiRemote(),
   })
+  .component("UserImage", UserImage)
+  .component("TimeStamp", TimeStamp)
   .mount("#app");

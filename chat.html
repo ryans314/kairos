@@ -30,6 +30,12 @@
         <button @click="$graffiti.logout($graffitiSession.value)" id="logout">Log Out</button>
       </header>
       <main id="main">
+        <!-- <form @submit.prevent="uploadImage(selectedGroupChat?.channel)">
+          <label>
+            Image Url:
+            <input type="text" />
+          </label>
+        </form> -->
         <h2>Messages</h2>
 
         <graffiti-discover
@@ -67,7 +73,7 @@
                       <input type="text" v-model="editContent" />
                     </div>
                     <div class="messageTime">
-                      <p>{{getTime(object.value.published)}}</p>
+                      <time-stamp type="message" :object="object"></time-stamp>
                     </div>
                   </div>
                   <span class="controlButtons">
@@ -86,7 +92,7 @@
                       <p>{{object.value.content}}</p>
                     </div>
                     <div class="messageTime">
-                      <p>{{getTime(object.value.published)}}</p>
+                      <time-stamp type="message" :object="object"></time-stamp>
                     </div>
                   </div>
                   <span class="controlButtons">
@@ -107,7 +113,7 @@
                       <p>{{object.value.content}}</p>
                     </div>
                     <div class="messageTime">
-                      <p>{{getTime(object.value.published)}}</p>
+                      <time-stamp type="message" :object="object"></time-stamp>
                     </div>
                   </div>
                 </div>

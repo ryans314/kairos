@@ -10,7 +10,9 @@
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.js",
           "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@0.6.4/dist/browser/index.js",
           "@graffiti-garden/implementation-remote": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-remote@0.6.2/dist/browser/index.js",
-          "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs"
+          "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs",
+          "@graffiti-garden/wrapper-files": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/browser/index.js",
+          "@graffiti-garden/wrapper-files/vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/vue/index.mjs"
         }
       }
     </script>
@@ -63,17 +65,18 @@
               class="groupCard"
               v-for="(group, i) of groupChatObjects.sort((a, b) => b.lastModified - a.lastModified)"
               @click="openGroup(group)"
+              :key="group.value.object.channel"
             >
               <div class="groupIcon">
                 <img class="icon" src="assets/group.png" />
               </div>
               <div class="mainGroupSection">
+                <!-- <h1>{{group}}</h1> -->
                 <h3>{{group.value.object.name}}</h3>
                 <p>User: Preview Text!</p>
               </div>
               <div class="groupMetaInfo">
-                <p></p>
-                <p>9:07am</p>
+                <time-stamp type="group" :object="group"></time-stamp>
               </div>
             </div>
           </div>
