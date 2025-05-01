@@ -60,7 +60,8 @@ export const TimeStamp = defineAsyncComponent(async () => ({
       //console.log("ending updateMessage()");
     },
     /**
-     * Calculate the time since this.message was sent, and return a formatted string based on that.
+     * Calculate the time since this.message was sent, and update this.timeToDisplay
+     * to show  a formatted string based on the message sent time
      *
      * If the message was sent less than a minute ago, return "now"
      * If the message was sent less than an hour ago, return number of minutes
@@ -68,7 +69,6 @@ export const TimeStamp = defineAsyncComponent(async () => ({
      * Otherwise return the date
      */
     displayTime() {
-      //console.log("starting display");
       if (this.message === undefined) throw new Error("Error in displayTime - message is undefined");
       if (this.message === 0) {
         return "no messages yet";
@@ -83,16 +83,16 @@ export const TimeStamp = defineAsyncComponent(async () => ({
       const now = new Date();
       const diff = (now - sendDate) / 1000; //difference in seconds
       if (diff < 60) {
-        return "Now";
+        this.timeToDisplay = "Now";
+      } else if (diff < 60 * 60) {
+        this.timeToDisplay = Math.floor(diff / 60).toString() + "m";
+      } else {
+        this.timeToDisplay = sendDate.toLocaleString(undefined, {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
       }
-      if (diff < 60 * 60) {
-        return Math.floor(diff / 60).toString() + "m";
-      }
-      this.timeToDisplay = sendDate.toLocaleString(undefined, {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      });
     },
   },
   async created() {

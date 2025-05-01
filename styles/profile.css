@@ -1,0 +1,51 @@
+form {
+  display: none;
+}
+
+.editing form {
+  display: flex;
+  flex-direction: column;
+  max-width: 50ch;
+}
+textarea {
+  width: 90%;
+  height: 4lh;
+}
+
+.buttons {
+  width: 100%;
+}
+#profileButtons *,
+.buttons * {
+  min-width: 20ch;
+  min-height: 2lh;
+  background-color: #b8b9ee;
+  border-radius: 500px;
+  border: none;
+  box-shadow: 1px 1px 2px black;
+}
+
+#profileButtons *:hover,
+.buttons *:hover {
+  background-color: #ccd0ff;
+}
+
+#profileButtons *:active,
+.buttons *:active {
+  /* background-color: #ccd0ff; */
+  box-shadow: 1px 1px 2px gray;
+}
+
+.editing #profileInfo {
+  display: none;
+}
+.editing #profileButtons {
+  display: none;
+}
+
+#deleteProfile {
+  background-color: hsl(0, 100%, 70%);
+}
+#deleteProfile:hover {
+  background-color: hsl(0, 100%, 60%);
+}

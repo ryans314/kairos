@@ -10,7 +10,9 @@
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.js",
           "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@0.6.4/dist/browser/index.js",
           "@graffiti-garden/implementation-remote": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-remote@0.6.2/dist/browser/index.js",
-          "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs"
+          "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs",
+          "@graffiti-garden/wrapper-files": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/browser/index.js",
+          "@graffiti-garden/wrapper-files/vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/vue/index.mjs"
         }
       }
     </script>
@@ -66,7 +68,8 @@
                 <!-- editing message -->
                 <div class="messageContainer" v-if="object.url === messageToEdit">
                   <div class="sender">
-                    <p>{{object.actor}}</p>
+                    <a href="profile.html" @click.prevent="goToProfile(object.actor)">{{object.actor}}</a>
+                    <p></p>
                   </div>
                   <div class="messageBody">
                     <div class="messageContent">
@@ -85,7 +88,8 @@
                 <!-- non-editing message -->
                 <div v-else class="messageContainer">
                   <div class="sender">
-                    <p>{{object.actor}}</p>
+                    <a href="profile.html" @click.prevent="goToProfile(object.actor)">{{object.actor}}</a>
+                    <p></p>
                   </div>
                   <div class="messageBody">
                     <div class="messageContent">
@@ -106,7 +110,8 @@
                 <!-- non-editing message -->
                 <div class="messageContainer">
                   <div class="sender">
-                    <p>{{object.actor}}</p>
+                    <a href="profile.html" @click.prevent="goToProfile(object.actor)">{{object.actor}}</a>
+                    <p></p>
                   </div>
                   <div class="messageBody">
                     <div class="messageContent">

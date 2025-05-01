@@ -4,6 +4,9 @@ import { GraffitiRemote } from "@graffiti-garden/implementation-remote";
 import { GraffitiPlugin } from "@graffiti-garden/wrapper-vue";
 import { UserImage } from "./components/UserImage.js";
 import { TimeStamp } from "./components/TimeStamp.js";
+import { fileToGraffitiObject, graffitiFileSchema } from "@graffiti-garden/wrapper-files";
+import { GraffitiObjectToFile } from "@graffiti-garden/wrapper-files/vue";
+
 const app = createApp({
   data() {
     return {
@@ -18,18 +21,8 @@ const app = createApp({
       selectedUsers: [],
       manualUsers: [""],
       mostRecentMessages: {},
+      profileToView: "ubut",
     };
-  },
-  async mounted() {
-    console.log(localStorage);
-    this.selectedGroupChat = JSON.parse(localStorage.getItem("selectedGroupChat"));
-    console.log(this.selectedGroupChat);
-    if (window.location.href.includes("chat.html")) {
-      console.log("hhh");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Done");
-      document.getElementById("main").scrollTo({ left: 0, top: 1000 });
-    }
   },
   watch: {
     "$graffitiSession.value"(newSession) {
@@ -54,7 +47,7 @@ const app = createApp({
             content: this.myMessage,
             published: Date.now(),
           },
-          channels: [this.selectedGroupChat.channel],
+          channels: [this.selectedGroupChat.channel, this.$graffitiSession.value.actor],
         },
         session
       );
@@ -88,7 +81,7 @@ const app = createApp({
               members: [this.$graffitiSession.value.actor].concat(this.selectedUsers),
             },
           },
-          channels: ["designftw"],
+          channels: ["designftw", this.$graffitiSession.value.actor],
           allowed: undefined,
         },
         this.$graffitiSession.value
@@ -165,6 +158,167 @@ const app = createApp({
         hour12: true,
       });
     },
+    async createProfile(manual = false) {
+      const hasProfile = await this.hasProfile();
+      if (hasProfile) throw new Error("profile already exists!");
+
+      let name;
+      let pronouns;
+      let description;
+      if (!manual) {
+        //Get form data
+        const form = document.getElementById("profileForm");
+        if (form === null) {
+          throw new Error("Form is null");
+        }
+        const formData = new FormData(form);
+
+        //assign variables
+        name = formData.get("profileName");
+        pronouns = formData.get("profilePronouns");
+        description = formData.get("profileDescription");
+      } else {
+        name = manual["name"];
+        pronouns = "";
+        description = "";
+      }
+      // const imgFile = formData.get("profilePicture");
+
+      // const graffitiImage = fileToGraffitiObject(imgFile);
+
+      //Send graffiti object
+      await this.$graffiti.put(
+        {
+          value: {
+            activity: "create",
+            type: "Profile",
+            name: name,
+            pronouns: pronouns,
+            description: description,
+            // profilePicture: graffitiImage,
+            published: Date.now(),
+          },
+          channels: [this.$graffitiSession.value.actor],
+        },
+        this.$graffitiSession.value
+      );
+    },
+    /**
+     * Update a profile
+     *
+     */
+    async updateProfile(profile, abort = false) {
+      document.getElementById("app").classList.remove("editing");
+      if (abort) {
+        return;
+      }
+      //Get form data
+      const form = document.getElementById("profileForm");
+      form.classList.remove("active");
+      if (form === null) {
+        throw new Error("Form is null");
+      }
+      const formData = new FormData(form);
+
+      //assign variables
+      const name = formData.get("profileName");
+      const pronouns = formData.get("profilePronouns");
+      const description = formData.get("profileDescription");
+      // const imgURL = formData.get("description");
+
+      //Send graffiti object
+      await this.$graffiti.patch(
+        {
+          value: [
+            { op: "replace", path: "/name", value: name },
+            { op: "replace", path: "/pronouns", value: pronouns },
+            { op: "replace", path: "/description", value: description },
+          ],
+        },
+        profile,
+        this.$graffitiSession.value
+      );
+    },
+    async deleteProfile(url) {
+      if (
+        !confirm(
+          "Are you sure you want to delete your account? This action is irreversible, and will delete your account, messages, and all group chats you own"
+        )
+      ) {
+        return;
+      }
+      console.log("deleting");
+      // this.$graffiti.delete(url, this.$graffitiSession.value);
+      const userObjects = await this.$graffiti.discover([this.$graffitiSession.value.actor], {});
+      console.log(userObjects);
+      const objectsToDelete = await Array.fromAsync(userObjects);
+      console.log(objectsToDelete);
+      for (const object of objectsToDelete) {
+        console.log("object:", object);
+        console.log("object url:", object.object.url);
+        this.$graffiti.delete(object.object.url, this.$graffitiSession.value);
+      }
+      alert("Account deletion successful! You will now be logged out!");
+      this.$graffiti.logout(this.$graffitiSession.value);
+    },
+    editProfile() {
+      const app = document.getElementById("app");
+      // const editButton = document.getElementById("editProfile");
+      // editButton.textContent = "Cancel";
+      app.classList.add("editing");
+    },
+    async hasProfile(actor = this.$graffitiSession?.value.actor) {
+      if (actor === undefined) {
+        throw new Error("actor is undefined");
+      }
+      const profiles = await Array.fromAsync(
+        this.$graffiti.discover([actor], {
+          properties: {
+            value: {
+              properties: {
+                type: {
+                  type: "string",
+                  const: "Profile",
+                },
+              },
+            },
+          },
+        })
+      );
+      console.log(profiles);
+      return profiles.length >= 1;
+    },
+    goToProfile(user) {
+      if (user === undefined) {
+        user = this.$graffitiSession.value.actor;
+      }
+      console.log("WORKS");
+      localStorage.setItem("profileToView", user);
+      // this.profileToView = user;
+      window.location.href = "profile.html";
+      return true;
+    },
+  },
+  async mounted() {
+    console.log(localStorage);
+    this.selectedGroupChat = JSON.parse(localStorage.getItem("selectedGroupChat"));
+    this.profileToView = localStorage.getItem("profileToView");
+    console.log(this.selectedGroupChat);
+    // await new Promise((res) => setTimeout(res, 100));
+    try {
+      const hasProfile = await this.hasProfile(this.$graffitiSession.value.actor);
+      if (!hasProfile) {
+        this.createProfile({ name: this.$graffitiSession.value.actor });
+      } else {
+        console.log("profile exists");
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    // if (window.location.href.includes("chat.html")) {
+    //   await new Promise((resolve) => setTimeout(resolve, 1000));
+    //   document.getElementById("main").scrollTo({ left: 0, top: 1000 });
+    // }
   },
 })
   .use(GraffitiPlugin, {
