@@ -1,3 +1,5 @@
+<button class="createButton" id="newGroup" @click="openCreateGroup()"></button>
+
 <div id="backgroundCover">
   <div id="newGroupFrame">
     <button class="closeButton" @click="closeCreateGroup()">X</button>
@@ -63,7 +65,7 @@
         <button type="button" @click="selectMember()">Add member</button>
       </div>
 
-      <input type="submit" />
+      <input class="stylizedButton" type="submit" />
     </form>
 
     <!-- <label>Group Name: <input type="text" v-model="groupName"/> </label> -->

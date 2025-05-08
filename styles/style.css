@@ -19,9 +19,18 @@
   display: block;
   font-size: 2em;
   border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px 5px black;
   width: 50%;
   height: 2lh;
   background-color: #b8b9ee;
+}
+#landing button:hover {
+  background-color: #c0c5fa;
+}
+#landing button:active {
+  background-color: #c0c5fa;
+  box-shadow: 1px 1px 5px gray;
 }
 
 header img:hover {
@@ -72,30 +81,6 @@ main {
   margin: 1em;
 }
 
-.createButton {
-  border-width: 0px;
-  border-radius: 50%;
-  background-image: url("../assets/plus.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 75% 75%;
-  background-color: rgba(0, 0, 255, 0.8);
-  height: 100px;
-  width: 100px;
-  max-width: 20vw;
-  max-height: 20vw;
-  box-shadow: 1px 1px 5px black;
-  position: fixed;
-  bottom: 7lh;
-  right: 1em;
-  float: right;
-  padding: 5px;
-}
-
-.createButton:hover {
-  cursor: pointer;
-  background-color: rgba(25, 25, 255, 1);
-}
 footer {
   display: flex;
   background-color: #b8b9ee;
@@ -118,4 +103,44 @@ header {
   padding-left: 4px;
   padding-right: 4px;
   z-index: 1000000;
+}
+
+/* #profileButtons *,
+.buttons * {
+  min-width: 20ch;
+  min-height: 2lh;
+  background-color: #b8b9ee;
+  border-radius: 500px;
+  border: none;
+}
+
+#profileButtons *:hover,
+.buttons *:hover {
+  background-color: #ccd0ff;
+}
+
+.stylizedButton:active {
+  background-color: #ccd0ff;
+}
+
+box-shadow: 1px 1px 3px gray;
+.stylizedButton {
+  box-shadow: 1px 1px 3px black;
+} */
+
+.stylizedButton {
+  min-width: 20ch;
+  min-height: 2lh;
+  background-color: white;
+  border-radius: 500px;
+  border: none;
+  box-shadow: 1px 1px 3px black;
+}
+
+.stylizedButton:hover {
+  background-color: hsl(0, 0%, 95%);
+}
+.stylizedButton:active {
+  background-color: hsl(0, 0%, 90%);
+  box-shadow: 1px 1px 3px hsl(0, 0%, 40%);
 }

@@ -59,44 +59,6 @@ footer div {
   text-align: center;
 }
 
-#backgroundCover {
-  display: none;
-}
-
-.creating #backgroundCover {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-.creating #newGroupFrame {
-  width: 90%;
-  height: 70vh;
-  max-width: 700px;
-  background-color: #bbbbbb;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 1px 1px 10px black;
-  padding: 1em;
-}
-
-#newGroupFrame #groupName {
-  height: 1.5lh;
-  font-size: 1.5em;
-  background-color: inherit;
-  border: none;
-  border-bottom: 2px solid black;
-}
-
-.closeButton {
-  margin-left: 95%;
-}
-
 main {
   /* margin-bottom: 5lh; */
   padding-bottom: 5lh;

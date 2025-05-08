@@ -22,93 +22,20 @@
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/chat.css" />
     <link rel="stylesheet" href="styles/profile.css" />
+    <link rel="stylesheet" href="create-button.css" />
   </head>
   <body>
     <div id="app">
       <div v-if="$graffitiSession && $graffitiSession.value?.actor">
-        <header class="appHeader">
-          <span>
-            <router-link :to="`/profile/${encodeURIComponent($graffitiSession.value.actor)}`">
-              <img class="icon" src="assets/profile.png" href="profile.html" />
-            </router-link>
+        <router-view name="header"></router-view>
 
-            <router-link :to="'/'">
-              <h1>Kairos</h1>
-            </router-link>
-          </span>
-          <button @click="logout()" id="logout">Log Out</button>
-        </header>
         <main>
           <router-view name="main"></router-view>
 
-          <button class="createButton" id="newGroup" @click="openCreateGroup()"></button>
+          <create-button></create-button>
         </main>
 
         <router-view name="footer"></router-view>
-
-        <div id="backgroundCover">
-          <div id="newGroupFrame">
-            <button class="closeButton" @click="closeCreateGroup()">X</button>
-            <h2>Create New Group</h2>
-            <form @submit.prevent="createGroup">
-              <label for="name">
-                <input
-                  type="string"
-                  id="groupName"
-                  v-model="newGroupName"
-                  placeholder="Group Name (required)"
-                  autofocus
-                />
-              </label>
-              <h3>Add Members:</h3>
-              <graffiti-discover
-                v-slot="{ objects: groupChatObjects}"
-                :channels="['designftw']"
-                :schema='{
-                  "properties": {
-                    "value": {
-                      "required": ["activity", "object"],
-                      "properties": {
-                        "activity": {"type": "string"},
-                        "object": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "const": "Group Chat"
-                            },
-                            "name": {"type": "string"},
-                            "channel": {"type": "string"},
-                            "members": {
-                              "type": "array",
-                              "contains": {"const": $graffitiSession.value.actor}
-                            }
-                          },
-                          "required": ["type", "name", "channel", "members"]
-                        }
-                      }
-                    }
-                  }
-                }'
-              >
-                <p>Suggested:</p>
-                <div v-for="user of getMembers(groupChatObjects)">
-                  <input type="checkbox" :id="user" name="members" :value="user" v-model="selectedUsers" />
-                  <label :for="user">{{user}}</label>
-                </div>
-              </graffiti-discover>
-              <p>Other Members:</p>
-              <div>
-                <input type="text" v-model="memberToAdd" @keydown.enter.prevent="selectMember" />
-                <button type="button" @click="selectMember()">Add member</button>
-              </div>
-
-              <input type="submit" />
-            </form>
-
-            <!-- <label>Group Name: <input type="text" v-model="groupName"/> </label> -->
-          </div>
-        </div>
       </div>
       <div v-else id="landing">
         <h1>Welcome to Kairos</h1>
