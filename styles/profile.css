@@ -1,8 +1,8 @@
-form {
+/* form {
   display: none;
-}
+} */
 
-.editing form {
+#profile form {
   display: flex;
   flex-direction: column;
   max-width: 50ch;
@@ -12,7 +12,7 @@ textarea {
   height: 4lh;
 }
 
-.buttons {
+#profile .buttons {
   width: 100%;
 }
 #profileButtons *,
@@ -36,12 +36,12 @@ textarea {
   box-shadow: 1px 1px 2px gray;
 }
 
-.editing #profileInfo {
+/* .editing #profileInfo {
   display: none;
 }
 .editing #profileButtons {
   display: none;
-}
+} */
 
 #deleteProfile {
   background-color: hsl(0, 100%, 70%);

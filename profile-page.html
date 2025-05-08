@@ -1,0 +1,94 @@
+<div id="profile">
+  <h1>Profile</h1>
+  <graffiti-discover
+    v-slot="{objects: profileObjects}"
+    :channels="[profileId]"
+    :schema='{
+  properties: {
+    value: {
+      required: ["type"],
+      properties: {
+        type: {
+          type: "string",
+          const: "Profile"
+        }
+      }
+    }
+  }
+}'
+  >
+    <div v-for="(profile, i) of profileObjects">
+      <h2>{{profile.value.name}}</h2>
+      <dl id="profileInfo">
+        <dt>Pronouns</dt>
+        <dd v-if="profile.value.pronouns !== ''">{{profile.value.pronouns}}</dd>
+        <dd v-else>This user has not filled out their pronouns</dd>
+
+        <dt>Bio</dt>
+        <dd v-if="profile.value.description !== ''">{{profile.value.description}}</dd>
+        <dd v-else>This user has not filled out their bio</dd>
+      </dl>
+      <form id="profileForm" @submit.prevent="updateProfile(profile)" v-if="this.editing">
+        <dl>
+          <label for="profileName">
+            <dt>Name:</dt>
+            <dd>
+              <input type="text" id="profileName" name="profileName" :value="profile.value.name" />
+            </dd>
+          </label>
+          <label for="profilePronouns">
+            <dt>Pronouns:</dt>
+            <dd>
+              <input type="text" id="profilePronouns" name="profilePronouns" :value="profile.value.pronouns" />
+            </dd>
+          </label>
+          <label for="profileDescription">
+            <dt>Description:</dt>
+            <dd>
+              <textarea
+                type="text"
+                id="profileDescription"
+                name="profileDescription"
+                :value="profile.value.description"
+              ></textarea>
+            </dd>
+          </label>
+        </dl>
+        <!-- <label for="profilePicture">
+      Profile Picture:
+      <input id="profilePicture" type="file" accept="image/*" name="profilePicture" />
+    </label> -->
+        <div class="buttons">
+          <input type="submit" value="Save Edit" />
+          <input type="button" value="Cancel" @click="updateProfile(profile.url, abort=true)" />
+        </div>
+      </form>
+      <div v-if="$graffitiSession.value.actor === profileId && !this.editing" id="profileButtons">
+        <button @click="editProfile()" id="editProfile">Edit Profile</button>
+        <button @click="deleteProfile(profile.url)" id="deleteProfile">Delete profile</button>
+      </div>
+    </div>
+
+    <!-- <div v-if="profileObjects.length === 0">
+  <form id="profileForm" @submit.prevent="createProfile()">
+    <label for="profileName">
+      Name:
+      <input type="text" id="profileName" name="profileName" />
+    </label>
+    <label for="profilePronouns">
+      Pronouns:
+      <input type="text" id="profilePronouns" name="profilePronouns" />
+    </label>
+    <label for="profileDescription">
+      Description:
+      <input type="text" id="profileDescription" name="profileDescription" />
+    </label> -->
+    <!-- <label for="profilePicture">
+      Profile Picture:
+      <input id="profilePicture" type="file" accept="image/*" name="profilePicture" />
+    </label> -->
+    <!-- <input type="submit" value="create profile" />
+  </form>
+</div> -->
+  </graffiti-discover>
+</div>

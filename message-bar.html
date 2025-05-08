@@ -1,0 +1,8 @@
+<footer>
+  <form @submit.prevent="sendMessage($graffitiSession.value)">
+    <fieldset :disabled="sending">
+      <input id="messageBar" type="text" v-model="myMessage" placeholder="Message" ref="messageInput" v-focus />
+      <input type="submit" :value="sending? 'Sending...' : 'Send'" />
+    </fieldset>
+  </form>
+</footer>

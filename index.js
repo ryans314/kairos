@@ -1,63 +1,79 @@
-import { createApp } from "vue";
+import { createApp, defineAsyncComponent } from "vue";
 import { GraffitiLocal } from "@graffiti-garden/implementation-local";
 import { GraffitiRemote } from "@graffiti-garden/implementation-remote";
 import { GraffitiPlugin } from "@graffiti-garden/wrapper-vue";
-import { UserImage } from "./components/UserImage.js";
 import { TimeStamp } from "./components/TimeStamp.js";
 import { fileToGraffitiObject, graffitiFileSchema } from "@graffiti-garden/wrapper-files";
 import { GraffitiObjectToFile } from "@graffiti-garden/wrapper-files/vue";
+import { createRouter, createWebHashHistory } from "vue-router";
+import { GroupList } from "./group-list.js";
+import { FooterNav } from "./footer-nav.js";
+import { MessageBar } from "./message-bar.js";
+import { MessageList } from "./message-list.js";
+import { ProfilePage } from "./profile-page.js";
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [
+    {
+      path: "/",
+      components: {
+        main: defineAsyncComponent(GroupList),
+        footer: defineAsyncComponent(FooterNav),
+      },
+    },
+    {
+      path: "/chat/:chatId",
+      components: {
+        main: defineAsyncComponent(MessageList),
+        footer: defineAsyncComponent(MessageBar),
+      },
+      props: { main: true, footer: true },
+    },
+    {
+      path: "/profile/:profileId",
+      components: {
+        main: defineAsyncComponent(ProfilePage),
+        footer: defineAsyncComponent(FooterNav),
+      },
+      props: { main: true },
+    },
+  ],
+});
 
 const app = createApp({
+  components: {
+    GroupList: defineAsyncComponent(GroupList),
+  },
   data() {
     return {
-      myMessage: "",
-      sending: false,
       channels: ["designftw"],
       newGroupName: "",
       selectedGroupChat: undefined, //current group chat object (.value.object)
-      messageToEdit: undefined,
-      editContent: "",
       memberToAdd: "",
       selectedUsers: [],
       manualUsers: [""],
       mostRecentMessages: {},
-      profileToView: "ubut",
     };
   },
-  watch: {
-    "$graffitiSession.value"(newSession) {
-      if (newSession && window.location.href.includes("landing.html")) {
-        window.location.href = "index.html";
-      } else if (!newSession && !window.location.href.includes("landing.html")) {
-        window.location.href = "landing.html";
+  methods: {
+    async login() {
+      await this.$graffiti.login();
+      console.log("1");
+      try {
+        const hasProfile = await this.hasProfile(this.$graffitiSession.value.actor);
+        if (!hasProfile) {
+          this.createProfile({ name: this.$graffitiSession.value.actor });
+        } else {
+          console.log("profile exists");
+        }
+      } catch (e) {
+        console.warn(e);
       }
     },
-  },
-  methods: {
-    async sendMessage(session) {
-      if (!this.myMessage) return;
-      // if (this.selectedGroupChat === undefined) return;
-      this.sending = true;
-
-      await this.$graffiti.put(
-        {
-          value: {
-            activity: "create",
-            type: "Message",
-            content: this.myMessage,
-            published: Date.now(),
-          },
-          channels: [this.selectedGroupChat.channel, this.$graffitiSession.value.actor],
-        },
-        session
-      );
-
-      this.sending = false;
-      this.myMessage = "";
-
-      // Refocus the input field after sending the message
-      await this.$nextTick();
-      this.$refs.messageInput.focus();
+    logout() {
+      router.push("/");
+      this.$graffiti.logout(this.$graffitiSession.value);
     },
     openCreateGroup() {
       const app = document.getElementById("app");
@@ -88,38 +104,6 @@ const app = createApp({
       );
       this.newGroupName = "";
     },
-    async deleteMessage(msg) {
-      await this.$graffiti.delete(msg.url, this.$graffitiSession.value);
-    },
-    startEdit(msg) {
-      this.messageToEdit = msg.url;
-      this.editContent = msg.value.content;
-    },
-    async finishEdit(msg) {
-      await this.$graffiti.patch(
-        {
-          value: [
-            {
-              op: "replace",
-              path: "/content",
-              value: this.editContent,
-            },
-          ],
-        },
-        msg,
-        this.$graffitiSession.value
-      );
-      this.cancelEdit();
-    },
-    cancelEdit() {
-      this.messageToEdit = undefined;
-      this.editContent = undefined;
-    },
-    openGroup(group) {
-      localStorage.setItem("selectedGroupChat", JSON.stringify(group.value.object));
-      window.location.href = "chat.html";
-    },
-
     /**
      * Get a list of shared members
      * @param groups all groups the user is a part of
@@ -288,43 +272,12 @@ const app = createApp({
       console.log(profiles);
       return profiles.length >= 1;
     },
-    goToProfile(user) {
-      if (user === undefined) {
-        user = this.$graffitiSession.value.actor;
-      }
-      console.log("WORKS");
-      localStorage.setItem("profileToView", user);
-      // this.profileToView = user;
-      window.location.href = "profile.html";
-      return true;
-    },
-  },
-  async mounted() {
-    console.log(localStorage);
-    this.selectedGroupChat = JSON.parse(localStorage.getItem("selectedGroupChat"));
-    this.profileToView = localStorage.getItem("profileToView");
-    console.log(this.selectedGroupChat);
-    // await new Promise((res) => setTimeout(res, 100));
-    try {
-      const hasProfile = await this.hasProfile(this.$graffitiSession.value.actor);
-      if (!hasProfile) {
-        this.createProfile({ name: this.$graffitiSession.value.actor });
-      } else {
-        console.log("profile exists");
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-    // if (window.location.href.includes("chat.html")) {
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    //   document.getElementById("main").scrollTo({ left: 0, top: 1000 });
-    // }
   },
 })
   .use(GraffitiPlugin, {
     graffiti: new GraffitiLocal(),
     // graffiti: new GraffitiRemote(),
   })
-  .component("UserImage", UserImage)
+  .use(router)
   .component("TimeStamp", TimeStamp)
   .mount("#app");

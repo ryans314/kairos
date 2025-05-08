@@ -19,6 +19,9 @@ header span {
   display: flex;
   flex-direction: row;
   box-shadow: 1px 1px 5px black;
+
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .groupCard:hover {
@@ -95,5 +98,6 @@ footer div {
 }
 
 main {
-  margin-bottom: 5lh;
+  /* margin-bottom: 5lh; */
+  padding-bottom: 5lh;
 }

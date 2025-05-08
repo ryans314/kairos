@@ -1,0 +1,71 @@
+<div id="backgroundCover">
+  <div id="newGroupFrame">
+    <button class="closeButton" @click="closeCreateGroup()">X</button>
+    <h2>Create New Group</h2>
+    <form @submit.prevent="createGroup">
+      <label for="name">
+        <input type="string" id="groupName" v-model="newGroupName" placeholder="Group Name (required)" autofocus />
+      </label>
+      <h3>Add Members:</h3>
+      <graffiti-discover
+        v-slot="{ objects: groupChatObjects}"
+        :channels="['designftw']"
+        :schema='{
+          "properties": {
+            "value": {
+              "required": ["activity", "object"],
+              "properties": {
+                "activity": {"type": "string"},
+                "object": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "Group Chat"
+                    },
+                    "name": {"type": "string"},
+                    "channel": {"type": "string"},
+                    "members": {
+                      "type": "array",
+                      "contains": {"const": $graffitiSession.value.actor}
+                    }
+                  },
+                  "required": ["type", "name", "channel", "members"]
+                }
+              }
+            }
+          }
+        }'
+      >
+        <p>Suggested:</p>
+        <div v-for="user of getMembers(groupChatObjects)">
+          <input type="checkbox" :id="user" name="members" :value="user" v-model="selectedUsers" />
+          <label :for="user">{{user}}</label>
+        </div>
+
+        <!-- <div>
+        <input type="checkbox" id="check0" name="members" v-model="manualUsers[i]" />
+        <input type="text" v-model="checkboxes[0]" />
+        <label for="check0"></label>
+      </div> -->
+
+        <!-- <div v-for="(user, i) in manualUsers">
+        <input type="checkbox" :id="'manual-'+i" name="members" :value="user" v-model="selectedUsers" />
+        <input type="text" v-model="manualUsers[i]" />
+        <label :for="'manual-'+i">{{user}}</label>
+      </div> -->
+
+        <!-- {{selectedUsers}} -->
+      </graffiti-discover>
+      <p>Other Members:</p>
+      <div>
+        <input type="text" v-model="memberToAdd" @keydown.enter.prevent="selectMember" />
+        <button type="button" @click="selectMember()">Add member</button>
+      </div>
+
+      <input type="submit" />
+    </form>
+
+    <!-- <label>Group Name: <input type="text" v-model="groupName"/> </label> -->
+  </div>
+</div>

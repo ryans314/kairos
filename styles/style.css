@@ -1,3 +1,29 @@
+/* LANDING PAGE STYLES */
+#landing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  height: 95vh;
+  width: 95vw;
+}
+
+#landing h1 {
+  display: block;
+  text-align: center;
+  font-size: 4em;
+}
+
+#landing button {
+  display: block;
+  font-size: 2em;
+  border-radius: 20px;
+  width: 50%;
+  height: 2lh;
+  background-color: #b8b9ee;
+}
+
 header img:hover {
   cursor: pointer;
 }
