@@ -31,12 +31,16 @@ const router = createRouter({
       props: { main: true, footer: true },
     },
     {
-      path: "/profile/:profileId",
+      path: "/profile/:profileId(.*)",
       components: {
         main: defineAsyncComponent(ProfilePage),
         footer: defineAsyncComponent(FooterNav),
       },
-      props: { main: true },
+      props: {
+        main: (route) => ({
+          profileId: decodeURIComponent(route.params.profileId),
+        }),
+      },
     },
   ],
 });
@@ -58,18 +62,9 @@ const app = createApp({
   },
   methods: {
     async login() {
-      await this.$graffiti.login();
-      console.log("1");
-      try {
-        const hasProfile = await this.hasProfile(this.$graffitiSession.value.actor);
-        if (!hasProfile) {
-          this.createProfile({ name: this.$graffitiSession.value.actor });
-        } else {
-          console.log("profile exists");
-        }
-      } catch (e) {
-        console.warn(e);
-      }
+      console.log("login0");
+      this.$graffiti.login();
+      console.log("login1");
     },
     logout() {
       router.push("/");
@@ -142,7 +137,7 @@ const app = createApp({
         hour12: true,
       });
     },
-    async createProfile(manual = false) {
+    async createProfile(manual) {
       const hasProfile = await this.hasProfile();
       if (hasProfile) throw new Error("profile already exists!");
 
@@ -176,13 +171,15 @@ const app = createApp({
           value: {
             activity: "create",
             type: "Profile",
+            generator: "https://ryans314.github.io/kairos/",
+            describes: this.$graffitiSession.value.actor,
             name: name,
             pronouns: pronouns,
             description: description,
             // profilePicture: graffitiImage,
             published: Date.now(),
           },
-          channels: [this.$graffitiSession.value.actor],
+          channels: ["designftw-2025-studio2", this.$graffitiSession.value.actor],
         },
         this.$graffitiSession.value
       );
@@ -252,6 +249,7 @@ const app = createApp({
       app.classList.add("editing");
     },
     async hasProfile(actor = this.$graffitiSession?.value.actor) {
+      console.log("this is hasProfile, checking if has profile");
       if (actor === undefined) {
         throw new Error("actor is undefined");
       }
@@ -273,10 +271,32 @@ const app = createApp({
       return profiles.length >= 1;
     },
   },
+  async created() {
+    const afterLogin = async (e) => {
+      // const session = this.$graffitiSession.value;
+      console.log("running after login!");
+      if (!(await this.hasProfile())) {
+        console.log("we don't have a profile!");
+        await this.createProfile({ name: this.$graffitiSession.value.actor });
+      } else {
+        console.log("we do have a profile :(");
+      }
+
+      this.$router.push("/");
+    };
+
+    this.$graffiti.sessionEvents.addEventListener("initialized", afterLogin, { once: true });
+    // this.$graffiti.sessionEvents.addEventListener("login", afterLogin);
+    this.graffitiAfterLogin = afterLogin;
+  },
+  beforeUnmount() {
+    this.$graffiti.sessionEvents.removeEventListener("initialized", this.graffitiAfterLogin);
+    // this.$graffiti.sessionEvents.removeEventListener("login", this.graffitiAfterLogin);
+  },
 })
   .use(GraffitiPlugin, {
-    graffiti: new GraffitiLocal(),
-    // graffiti: new GraffitiRemote(),
+    // graffiti: new GraffitiLocal(),
+    graffiti: new GraffitiRemote(),
   })
   .use(router)
   .component("TimeStamp", TimeStamp)

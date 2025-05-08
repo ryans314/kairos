@@ -5,7 +5,7 @@ export const TimeStamp = defineAsyncComponent(async () => ({
   data() {
     return {
       message: undefined,
-      timeToDisplay: undefined,
+      timeToDisplay: "Loading...",
     };
   },
   props: {
@@ -22,6 +22,7 @@ export const TimeStamp = defineAsyncComponent(async () => ({
     async updateMessage(object, type) {
       //console.log("starting updateMessage");
       if (object === undefined) {
+        this.message = "No Messages Yet";
         throw new Error("Object should not be undefined");
       }
       if (type === "message") {
@@ -69,7 +70,12 @@ export const TimeStamp = defineAsyncComponent(async () => ({
      * Otherwise return the date
      */
     displayTime() {
-      if (this.message === undefined) throw new Error("Error in displayTime - message is undefined");
+      if (this.message === undefined) {
+        this.timeToDisplay = "No Messages Yet";
+        console.warn("Message is undefined in display time");
+        return "No messages yet";
+        throw new Error("Error in displayTime - message is undefined");
+      }
       if (this.message === 0) {
         return "no messages yet";
       }

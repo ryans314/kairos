@@ -1,5 +1,4 @@
 import { defineAsyncComponent } from "vue";
-
 export async function ProfilePage() {
   return {
     props: ["profileId"],
@@ -66,6 +65,7 @@ export async function ProfilePage() {
           this.$graffiti.delete(object.object.url, this.$graffitiSession.value);
         }
         alert("Account deletion successful! You will now be logged out!");
+        this.$router.push("/");
         this.$graffiti.logout(this.$graffitiSession.value);
       },
       editProfile() {

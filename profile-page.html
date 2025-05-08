@@ -4,18 +4,20 @@
     v-slot="{objects: profileObjects}"
     :channels="[profileId]"
     :schema='{
-  properties: {
-    value: {
-      required: ["type"],
-      properties: {
-        type: {
-          type: "string",
-          const: "Profile"
+
+    
+    properties: {
+      value: {
+        required: ["type"],
+        properties: {
+          type: {
+            type: "string",
+            const: "Profile"
+          }
         }
       }
     }
-  }
-}'
+  }'
   >
     <div v-for="(profile, i) of profileObjects">
       <h2>{{profile.value.name}}</h2>

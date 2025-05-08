@@ -28,7 +28,7 @@
       <div v-if="$graffitiSession && $graffitiSession.value?.actor">
         <header class="appHeader">
           <span>
-            <router-link :to="'/profile/'+$graffitiSession.value.actor">
+            <router-link :to="`/profile/${encodeURIComponent($graffitiSession.value.actor)}`">
               <img class="icon" src="assets/profile.png" href="profile.html" />
             </router-link>
 
@@ -113,6 +113,7 @@
       <div v-else id="landing">
         <h1>Welcome to Kairos</h1>
         <button @click="login()">Log In</button>
+        {{$graffitiSession}}
       </div>
     </div>
 
