@@ -19,12 +19,37 @@ export async function MessageList() {
         messageObjects: [],
         messageToEdit: undefined,
         editContent: "",
+        actorToProfile: {},
       };
     },
     async mounted() {
       window.addEventListener("scroll", (evt) => {
         this.updateScroll();
       });
+
+      //TODO: MOVE THIS INTO INDEX.JS FOR BETTER CACHING
+      //store all profiles in this.actorToProfile
+      const profileSchema = {
+        required: ["value"],
+        properties: {
+          activity: { type: "string", const: "Create" },
+          type: { type: "string", const: "Profile" },
+          describes: { type: "string" },
+          name: { type: "string" },
+        },
+      };
+
+      const profileStream = this.$graffiti.discover(["designftw-2025-studio2"], profileSchema);
+      const profileArray = await Array.fromAsync(profileStream);
+
+      for (const profile of profileArray) {
+        const name = profile.object.value.name;
+        const id = profile.object.value.describes;
+        this.actorToProfile[id] = name;
+      }
+      // if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
+      // if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
+
       // // <graffiti-discover
       // //   id="messageFrame"
       // //   v-slot="{ objects: messageObjects, isInitialPolling }"
@@ -62,6 +87,9 @@ export async function MessageList() {
       // // }
     },
     methods: {
+      getProfileFromId(id) {
+        return this.actorToProfile[id] ?? id;
+      },
       updateScroll() {
         console.log("updating scroll");
         const threshold = Math.min(document.body.scrollHeight * 0.6, document.body.scrollHeight - 1500);

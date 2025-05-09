@@ -23,7 +23,7 @@
           <!-- editing message -->
           <div class="messageContainer" v-if="object.url === messageToEdit">
             <div class="sender">
-              <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+              <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
             <div class="messageBody">
@@ -43,7 +43,7 @@
           <!-- non-editing message -->
           <div v-else class="messageContainer">
             <div class="sender">
-              <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+              <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
             <div class="messageBody">
@@ -65,7 +65,7 @@
           <!-- non-editing message -->
           <div class="messageContainer">
             <div class="sender">
-              <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+              <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
             <div class="messageBody">

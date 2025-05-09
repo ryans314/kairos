@@ -74,6 +74,10 @@ const app = createApp({
       this.$graffiti.logout(this.$graffitiSession.value);
     },
 
+    /**
+     *
+     * @param {*} manual form
+     */
     async createProfile(manual) {
       const hasProfile = await this.hasProfile();
       if (hasProfile) throw new Error("profile already exists!");
@@ -106,7 +110,7 @@ const app = createApp({
       await this.$graffiti.put(
         {
           value: {
-            activity: "create",
+            activity: "Create",
             type: "Profile",
             generator: "https://ryans314.github.io/kairos/",
             describes: this.$graffitiSession.value.actor,
@@ -209,14 +213,18 @@ const app = createApp({
     },
   },
   async created() {
+    //Handler to create profile on opening, if needed
     const afterLogin = async (e) => {
       // const session = this.$graffitiSession.value;
       console.log("running after login!");
       if (!(await this.hasProfile())) {
-        console.log("we don't have a profile!");
-        await this.createProfile({ name: this.$graffitiSession.value.actor });
-      } else {
-        console.log("we do have a profile :(");
+        //no existing profile
+        let name = this.$graffitiSession.value.actor;
+        const defaultNameStarter = "https://id.inrupt.com/";
+        if (name.includes(defaultNameStarter)) {
+          name = name.substring(defaultNameStarter.length);
+        }
+        await this.createProfile({ name: name });
       }
 
       this.$router.push("/");
@@ -269,4 +277,26 @@ export async function groupFromId(groupId, graffiti) {
   console.log(groupId);
   console.log(groupsArray[0].object.value.object);
   return groupsArray[0];
+}
+
+export async function profileFromId(actorId, graffiti, value) {
+  const profileSchema = {
+    required: ["value"],
+    properties: {
+      activity: { type: "string", const: "Create" },
+      type: { type: "string", const: "Profile" },
+      describes: { type: "string" },
+      name: { type: "string" },
+    },
+  };
+
+  const profileStream = graffiti.discover([actorId], profileSchema);
+  const profileArray = await Array.fromAsync(profileStream);
+  if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
+  if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
+  console.log(profileArray[0]);
+  console.log(profileArray[0].value?.name);
+  console.log(profileArray[0].object?.value?.name);
+  if (value === undefined) return profileArray[0];
+  if (value === "name") return profileArray[0].object.value.name;
 }
