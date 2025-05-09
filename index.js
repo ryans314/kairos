@@ -74,16 +74,6 @@ const app = createApp({
       this.$graffiti.logout(this.$graffitiSession.value);
     },
 
-    getTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleString(undefined, {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      });
-    },
     async createProfile(manual) {
       const hasProfile = await this.hasProfile();
       if (hasProfile) throw new Error("profile already exists!");
@@ -271,6 +261,7 @@ export async function groupFromId(groupId, graffiti) {
       },
     },
   };
+
   const groups = graffiti.discover(["designftw"], schema);
   const groupsArray = await Array.fromAsync(groups);
 

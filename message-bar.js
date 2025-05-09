@@ -18,7 +18,7 @@ export async function MessageBar() {
         await this.$graffiti.put(
           {
             value: {
-              activity: "create",
+              activity: "Create",
               type: "Message",
               content: this.myMessage,
               published: Date.now(),

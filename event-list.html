@@ -1,0 +1,82 @@
+<graffiti-discover
+  id="messageFrame"
+  v-slot="{ objects: eventObjects, isInitialPolling }"
+  :channels="[chatId]"
+  :schema="{
+                  properties: {
+                      value: {
+                          required: ['content', 'published'],
+                          properties: {
+                              content: { type: 'string' },
+                              published: { type: 'number' }
+                          }
+                      }
+                  }
+              }"
+>
+  <div id="messageFrame">
+    <p v-if="isInitialPolling">Loading...</p>
+    <div v-for="object of eventObjects.sort((a, b) => b.value.published - a.value.published)" :key="object.url">
+      <!-- Current Actor's Message -->
+      <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
+        <!-- editing message -->
+        <div class="messageContainer" v-if="object.url === messageToEdit">
+          <div class="sender">
+            <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+            <p></p>
+          </div>
+          <div class="messageBody">
+            <div class="messageContent">
+              <input type="text" v-model="editContent" />
+            </div>
+            <div class="messageTime">
+              <time-stamp type="message" :object="object"></time-stamp>
+            </div>
+          </div>
+          <span class="controlButtons">
+            <button @click="finishEdit(object)">Submit</button>
+            <button @click="cancelEdit()">Cancel</button>
+          </span>
+        </div>
+
+        <!-- non-editing message -->
+        <div v-else class="messageContainer">
+          <div class="sender">
+            <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+            <p></p>
+          </div>
+          <div class="messageBody">
+            <div class="messageContent">
+              <p>{{object.value.content}}</p>
+            </div>
+            <div class="messageTime">
+              <time-stamp type="message" :object="object"></time-stamp>
+            </div>
+          </div>
+          <span class="controlButtons">
+            <button @click="startEdit(object)">Edit</button>
+            <button @click="deleteMessage(object)">Delete</button>
+          </span>
+        </div>
+      </div>
+
+      <div v-else class="otherMessage">
+        <!-- non-editing message -->
+        <div class="messageContainer">
+          <div class="sender">
+            <router-link :to="`/profile/${object.actor}`"> {{object.actor}} </router-link>
+            <p></p>
+          </div>
+          <div class="messageBody">
+            <div class="messageContent">
+              <p>{{object.value.content}}</p>
+            </div>
+            <div class="messageTime">
+              <time-stamp type="message" :object="object"></time-stamp>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</graffiti-discover>

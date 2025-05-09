@@ -32,7 +32,7 @@
         <main>
           <router-view name="main"></router-view>
 
-          <create-event v-if="$route?.path.includes('/chat/')"> </create-event>
+          <create-event v-if="$route?.path.includes('/chat/')" :chatId="$route?.params.chatId"> </create-event>
           <create-button v-else></create-button>
         </main>
 
@@ -41,7 +41,7 @@
       <div v-else id="landing">
         <h1>Welcome to Kairos</h1>
         <button @click="login()">Log In</button>
-        {{$graffitiSession}}
+        <!-- {{$graffitiSession}} -->
       </div>
     </div>
 

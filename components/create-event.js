@@ -1,7 +1,9 @@
 import { defineAsyncComponent } from "vue";
 
 export const CreateEvent = defineAsyncComponent(async () => ({
-  props: ["chatId"],
+  props: {
+    chatid: String,
+  },
   data() {
     return {
       newEventName: "",
@@ -20,30 +22,42 @@ export const CreateEvent = defineAsyncComponent(async () => ({
       const app = document.getElementById("app");
       app.classList.remove("creating");
     },
+    getTime(date) {
+      // const date = new Date(timestamp);
+      return date.toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    },
     createEvent() {
       this.closeCreateEvent();
-      this.$graffiti.put(
-        {
-          value: {
-            activity: "Create",
-            object: {
-              type: "Event",
-              name: this.newEventName,
-              start: this.startTime,
-              end: this.endTime,
-              channel: this.chatId,
-              rsvp: {
-                yes: [],
-                maybe: [],
-                no: [],
-              },
+      const startDatetime = this.getTime(new Date(this.startTime));
+      const endDatetime = this.getTime(new Date(this.endTime));
+      const eventObject = {
+        value: {
+          activity: "Create",
+          published: Date.now(),
+          content: "NEW EVENT: " + this.newEventName + "- Starts " + startDatetime + "- Ends " + endDatetime,
+          object: {
+            type: "Event",
+            name: this.newEventName,
+            start: this.startTime,
+            end: this.endTime,
+            channel: this.chatid,
+            rsvp: {
+              yes: [],
+              maybe: [],
+              no: [],
             },
           },
-          channels: [this.chatId],
-          allowed: undefined,
         },
-        this.$graffitiSession.value
-      );
+        channels: [this.chatid, this.$graffitiSession.value.actor],
+        allowed: undefined,
+      };
+      this.$graffiti.put(eventObject, this.$graffitiSession.value);
       this.newEventName = "";
     },
   },
