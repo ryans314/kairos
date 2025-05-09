@@ -87,6 +87,17 @@ export async function MessageList() {
       // // }
     },
     methods: {
+      getTime(dateStr) {
+        const date = new Date(dateStr);
+        // const date = new Date(timestamp);
+        return date.toLocaleString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      },
       getProfileFromId(id) {
         return this.actorToProfile[id] ?? id;
       },

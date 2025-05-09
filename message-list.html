@@ -17,7 +17,8 @@
   <div id="messageFrame" @scroll="updateScroll()">
     <p v-if="isInitialPolling">Loading...</p>
     <div v-for="object of messageObjects.sort((a, b) => b.value.published - a.value.published)" :key="object.url">
-      <div>
+      <!-- NONEVENT -->
+      <div v-if="object.value.object?.type !== 'Event'">
         <!-- Current Actor's Message -->
         <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
           <!-- editing message -->
@@ -71,6 +72,58 @@
             <div class="messageBody">
               <div class="messageContent">
                 <p>{{object.value.content}}</p>
+              </div>
+              <div class="messageTime">
+                <time-stamp type="message" :object="object"></time-stamp>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENT -->
+      <div v-else>
+        <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
+          <!-- YOUR MESSAGE -->
+          <!-- {{object}} -->
+          <div class="messageContainer">
+            <div class="sender">
+              <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
+              <p></p>
+            </div>
+            <div class="messageBody">
+              <div class="messageContent">
+                <h3>{{object.value.object.name}}</h3>
+                <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
+                <!-- <p>{{object.value.object.description}}</p> -->
+                <span class="controlButtons">
+                  <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
+                  <!-- <button @click="deleteMessage(object)"></button> -->
+                </span>
+              </div>
+              <div class="messageTime">
+                <time-stamp type="message" :object="object"></time-stamp>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOMEONE ELSES MESSAGE -->
+        <div v-else class="otherMessage">
+          <div class="messageContainer">
+            <div class="sender">
+              <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
+              <p></p>
+            </div>
+            <div class="messageBody">
+              <div class="messageContent">
+                <h3>{{object.value.object.name}}</h3>
+                <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
+                <!-- <p>{{object.value.object.description}}</p> -->
+                <span class="controlButtons">
+                  <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
+                  <!-- <button @click="deleteMessage(object)"></button> -->
+                </span>
               </div>
               <div class="messageTime">
                 <time-stamp type="message" :object="object"></time-stamp>
