@@ -85,7 +85,6 @@
       <div v-else>
         <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
           <!-- YOUR MESSAGE -->
-          <!-- {{object}} -->
           <div class="messageContainer">
             <div class="sender">
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
@@ -95,7 +94,7 @@
               <div class="messageContent">
                 <h3>{{object.value.object.name}}</h3>
                 <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
-                <!-- <p>{{object.value.object.description}}</p> -->
+                <p>{{object.value.object.description}}</p>
                 <span class="controlButtons">
                   <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
                   <!-- <button @click="deleteMessage(object)"></button> -->
@@ -119,7 +118,7 @@
               <div class="messageContent">
                 <h3>{{object.value.object.name}}</h3>
                 <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
-                <!-- <p>{{object.value.object.description}}</p> -->
+                <p>{{object.value.object.description}}</p>
                 <span class="controlButtons">
                   <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
                   <!-- <button @click="deleteMessage(object)"></button> -->

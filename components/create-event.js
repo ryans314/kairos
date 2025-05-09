@@ -10,6 +10,7 @@ export const CreateEvent = defineAsyncComponent(async () => ({
       eventGroup: undefined,
       startTime: undefined,
       endTime: undefined,
+      description: "",
     };
   },
   methods: {
@@ -46,6 +47,7 @@ export const CreateEvent = defineAsyncComponent(async () => ({
             name: this.newEventName,
             start: this.startTime,
             end: this.endTime,
+            description: this.description,
             channel: this.chatid,
             rsvp: {
               yes: [],
