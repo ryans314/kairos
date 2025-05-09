@@ -11,9 +11,10 @@ import { FooterNav } from "./footer-nav.js";
 import { MessageBar } from "./message-bar.js";
 import { MessageList } from "./message-list.js";
 import { ProfilePage } from "./profile-page.js";
-import { CreateButton } from "./create-button.js";
+import { CreateButton } from "./components/create-button.js";
 import { HeaderBar } from "./header-bar.js";
 import { ChatHeader } from "./chat-header.js";
+import { CreateEvent } from "./components/create-event.js";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -247,4 +248,34 @@ const app = createApp({
   .use(router)
   .component("TimeStamp", TimeStamp)
   .component("CreateButton", CreateButton)
+  .component("CreateEvent", CreateEvent)
   .mount("#app");
+
+export async function groupFromId(groupId, graffiti) {
+  const schema = {
+    required: ["value"],
+    properties: {
+      value: {
+        required: ["object", "activity"],
+        properties: {
+          activity: { type: "string", const: "Create" },
+          object: {
+            required: ["type", "name", "channel"],
+            properties: {
+              type: { type: "string", const: "Group Chat" },
+              name: { type: "string" },
+              channel: { type: "string", const: groupId },
+            },
+          },
+        },
+      },
+    },
+  };
+  const groups = graffiti.discover(["designftw"], schema);
+  const groupsArray = await Array.fromAsync(groups);
+
+  console.log(groupsArray);
+  console.log(groupId);
+  console.log(groupsArray[0].object.value.object);
+  return groupsArray[0];
+}

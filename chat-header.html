@@ -1,8 +1,10 @@
 <header>
   <span>
-    <a href="index.html">
-      <img class="icon" src="assets/arrow.png" />
-    </a>
+    <router-link :to="'/'">
+      <a>
+        <img class="icon" src="assets/arrow.png" />
+      </a>
+    </router-link>
     <h1>{{chatObject?.object.value.object.name}}</h1>
   </span>
   <button class="stylizedButton" @click="$graffiti.logout($graffitiSession.value)" id="logout">Log Out</button>

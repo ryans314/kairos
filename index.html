@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/chat.css" />
     <link rel="stylesheet" href="styles/profile.css" />
-    <link rel="stylesheet" href="create-button.css" />
+    <link rel="stylesheet" href="styles/create-button.css" />
   </head>
   <body>
     <div id="app">
@@ -32,7 +32,8 @@
         <main>
           <router-view name="main"></router-view>
 
-          <create-button></create-button>
+          <create-event v-if="$route?.path.includes('/chat/')"> </create-event>
+          <create-button v-else></create-button>
         </main>
 
         <router-view name="footer"></router-view>

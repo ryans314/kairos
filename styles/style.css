@@ -144,3 +144,13 @@ box-shadow: 1px 1px 3px gray;
   background-color: hsl(0, 0%, 90%);
   box-shadow: 1px 1px 3px hsl(0, 0%, 40%);
 }
+.createEventContainer form {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: space-around;
+}
+.createEventContainer form label {
+  width: 100%;
+  /* background-color: red; */
+}

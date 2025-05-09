@@ -69,7 +69,7 @@ export const CreateButton = defineAsyncComponent(async () => ({
       return sortedMembers;
     },
   },
-  template: await fetch("./create-button.html").then((r) => {
+  template: await fetch("./components/create-button.html").then((r) => {
     console.log("create success");
     return r.text();
   }),

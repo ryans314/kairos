@@ -1,0 +1,31 @@
+<button class="createButton" id="newGroup" @click="openCreateEvent()"></button>
+
+<div id="backgroundCover">
+  <div id="newGroupFrame" class="createEventContainer">
+    <button class="closeButton" @click="closeCreateEvent()">X</button>
+    <h2>Create New Event</h2>
+    <form @submit.prevent="createEvent">
+      <label for="name">
+        Event Name:
+        <input
+          type="string"
+          id="groupName"
+          v-model="newEventName"
+          placeholder="Event Name (required)"
+          autofocus
+          required
+        />
+      </label>
+      <label for="startTime">
+        Start Time:
+        <input type="datetime-local" id="startTime" v-model="startTime" placeholder="" required />
+      </label>
+      <label for="endTime">
+        End Time:
+        <input type="datetime-local" id="endTime" v-model="endTime" placeholder="" required />
+      </label>
+
+      <input class="stylizedButton" type="submit" />
+    </form>
+  </div>
+</div>
