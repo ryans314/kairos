@@ -154,3 +154,22 @@ box-shadow: 1px 1px 3px gray;
   width: 100%;
   /* background-color: red; */
 }
+
+#scrollButton {
+  z-index: 100000;
+  width: 40vw;
+  position: fixed;
+  top: 4.5lh;
+  left: 30vw;
+  background-color: hsla(0, 0%, 50%, 85%);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 500ms ease;
+  border-radius: 5px;
+  border: none;
+  height: 3lh;
+  box-shadow: 0px 0px 4px black;
+}
+#scrollButton.scrolled {
+  opacity: 1;
+}
