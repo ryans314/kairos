@@ -69,17 +69,19 @@ footer fieldset {
   margin-bottom: 0.5lh;
 }
 
-.messageRow {
+.ownMessage .messageRow {
   display: flex;
   flex-direction: row-reverse;
+}
+.otherMessage .messageRow {
+  display: flex;
+  flex-direction: row;
 }
 
 .messageContainer .controlButtons {
   flex-basis: 0;
-  flex-grow: 0.01;
   margin-bottom: 0lh;
-  max-height: 0px;
-  max-width: 100%;
+  min-width: 8ch;
   opacity: 0;
   pointer-events: none;
   flex-direction: column;
@@ -88,7 +90,8 @@ footer fieldset {
 
 .messageContainer:hover .controlButtons,
 .editingMessage .controlButtons {
-  max-height: none;
+  /* max-width: none; */
+  /* max-height: none; */
   opacity: 1;
   pointer-events: all;
 }

@@ -73,13 +73,18 @@
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
-            <div class="messageBody">
-              <div class="messageContent">
-                <p>{{object.value.content}}</p>
+            <div class="messageRow">
+              <div class="messageBody">
+                <div class="messageContent">
+                  <p>{{object.value.content}}</p>
+                </div>
+                <div class="messageTime">
+                  <time-stamp type="message" :object="object"></time-stamp>
+                </div>
               </div>
-              <div class="messageTime">
-                <time-stamp type="message" :object="object"></time-stamp>
-              </div>
+              <span class="controlButtons">
+                <!-- <button></button> -->
+              </span>
             </div>
           </div>
         </div>
