@@ -279,3 +279,76 @@ export async function groupFromId(groupId, graffiti) {
   console.log(groupsArray[0].object.value.object);
   return groupsArray[0];
 }
+
+export async function rsvpToEvent(rsvpType, eventURL, graffiti, graffitiSession) {
+  console.log(graffitiSession);
+  if (!["Yes", "No", "Maybe"].includes(rsvpType)) {
+    throw new Error(`${rsvpType} is not a valid rsvp response`);
+  }
+  // const eventStream = graffiti.discover([groupURL], {
+  //   properties: {
+  //     url: { const: eventURL },
+  //     value: {
+  //       properties: {
+  //         object: {
+  //           properties: {
+  //             type: {
+  //               type: "string",
+  //               const: "Event",
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+
+  // const eventArray = await Array.fromAsync(eventStream);
+  // console.log("EVENTS MATCHING ", eventURL, " in ", groupURL, ": ", eventArray);
+  // console.log("number of events: ", eventArray.length);
+
+  const rsvpStream = graffiti.discover([graffitiSession.value.actor], {
+    properties: {
+      value: {
+        required: ["type", "eventURL", "rsvpType"],
+        properties: {
+          type: { const: "RSVP" },
+          eventURL: { const: eventURL },
+          rsvpType: { type: "string" },
+        },
+      },
+    },
+  });
+
+  const rsvpArray = await Array.fromAsync(rsvpStream);
+  console.log("RSVP ARRAY: ", rsvpArray);
+  if (rsvpArray.length > 1) {
+    throw new Error("more than one rsvp to the same event");
+  }
+  if (rsvpArray.length === 1) {
+    const rsvpObject = rsvpArray[0];
+    console.log("PATCHING RSVP");
+    graffiti.patch(
+      {
+        value: [{ op: "replace", path: "/rsvpType", value: rsvpType }],
+      },
+      rsvpObject.object.url,
+      graffitiSession.value
+    );
+  } else {
+    console.log("PUTTING RSVP");
+    // console.log(graffitiSession.value.actor);
+    graffiti.put(
+      {
+        value: {
+          activity: "Create",
+          type: "RSVP",
+          eventURL: eventURL,
+          rsvpType: rsvpType,
+        },
+        channels: [graffitiSession.value.actor, eventURL],
+      },
+      graffitiSession.value
+    );
+  }
+}

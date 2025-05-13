@@ -159,3 +159,23 @@ footer fieldset {
   box-shadow: 0.5px 0.5px 0.5px black;
   background-color: #e8e8e8;
 }
+.rsvpSelection {
+  position: absolute;
+  left: 0.5em;
+  text-align: center;
+  background-color: #d8d8d8;
+  box-shadow: 1px 1px 3px gray;
+}
+.rsvpSelection p {
+  padding: 0.5em;
+  line-height: 1.25lh;
+  margin: 0;
+}
+.rsvpSelection p:hover {
+  cursor: pointer;
+  background-color: #c8c8c8;
+}
+
+.rsvpSection {
+  position: relative;
+}

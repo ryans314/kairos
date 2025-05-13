@@ -93,6 +93,7 @@
       <!-- EVENT -->
       <div v-else>
         <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
+          {{object.value}}
           <!-- YOUR MESSAGE -->
           <div class="messageContainer">
             <div class="sender">
@@ -105,9 +106,13 @@
                   <h3>{{object.value.object.name}}</h3>
                   <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
                   <p>{{object.value.object.description}}</p>
-                  <span class="">
+                  <span class="rsvpSection">
                     <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
-                    <!-- <button @click="deleteMessage(object)"></button> -->
+                    <div class="rsvpSelection">
+                      <p @click="rsvp('Yes', object.url)">Yes</p>
+                      <p @click="rsvp('No', object.url)">No</p>
+                      <p @click="rsvp('Maybe', object.url)">Maybe</p>
+                    </div>
                   </span>
                 </div>
                 <div class="messageTime">

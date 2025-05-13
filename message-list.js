@@ -1,4 +1,5 @@
 import { defineAsyncComponent } from "vue";
+import { rsvpToEvent } from "./index.js";
 
 export async function MessageList() {
   return {
@@ -87,6 +88,9 @@ export async function MessageList() {
       // // }
     },
     methods: {
+      async rsvp(rsvpType, eventURL) {
+        rsvpToEvent(rsvpType, eventURL, this.$graffiti, this.$graffitiSession);
+      },
       getTime(dateStr) {
         const date = new Date(dateStr);
         // const date = new Date(timestamp);
