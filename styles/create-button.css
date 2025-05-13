@@ -52,13 +52,14 @@
 }
 
 .createButton {
+  z-index: 1000;
   border-width: 0px;
   border-radius: 50%;
   background-image: url("../assets/plus.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 75% 75%;
-  background-color: rgba(0, 0, 255, 0.8);
+  background-color: hsla(239, 80%, 70%, 0.8);
   height: 100px;
   width: 100px;
   max-width: 20vw;
@@ -74,9 +75,11 @@
 .createButton:hover {
   cursor: pointer;
   background-color: rgba(25, 25, 255, 1);
+  background-color: hsla(239, 80%, 70%, 1);
 }
 
 .createButton:active {
   background-color: rgba(30, 30, 255, 0.8);
+  background-color: hsla(239, 100%, 70%, 1);
   box-shadow: 1px 1px 7px gray;
 }
