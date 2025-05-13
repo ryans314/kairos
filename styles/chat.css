@@ -42,7 +42,7 @@ footer fieldset {
 }
 
 .sender {
-  z-index: 10;
+  /* z-index: 1; */
   margin-bottom: -5px;
   margin-inline-start: 2px;
   /* background-color: red; */
@@ -140,6 +140,7 @@ footer fieldset {
   line-height: 1.3lh;
   border-radius: 5px;
   box-shadow: 1px 1px 1.5px gray;
+  cursor: pointer;
 }
 .rsvpButton:active {
   box-shadow: 1px 1px 0px gray;
@@ -160,6 +161,7 @@ footer fieldset {
   background-color: #e8e8e8;
 }
 .rsvpSelection {
+  display: none;
   position: absolute;
   left: 0.5em;
   text-align: center;
@@ -178,4 +180,8 @@ footer fieldset {
 
 .rsvpSection {
   position: relative;
+}
+
+.rsvping .rsvpSelection {
+  display: block;
 }

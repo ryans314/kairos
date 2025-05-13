@@ -28,6 +28,16 @@ export async function MessageList() {
         this.updateScroll();
       });
 
+      document.addEventListener("click", (evt) => {
+        console.log("documentClick");
+        const rsvps = Array.from(document.getElementsByClassName("rsvpSection"));
+        rsvps.forEach((rsvp) => {
+          if (rsvp.classList.contains("rsvping")) {
+            rsvp.classList.remove("rsvping");
+          }
+        });
+      });
+
       //TODO: MOVE THIS INTO INDEX.JS FOR BETTER CACHING
       //store all profiles in this.actorToProfile
       const profileSchema = {
@@ -88,6 +98,10 @@ export async function MessageList() {
       // // }
     },
     methods: {
+      openRsvpPanel(i) {
+        const rsvpSection = document.getElementById("rsvp-" + i);
+        rsvpSection.classList.toggle("rsvping");
+      },
       async rsvp(rsvpType, eventURL) {
         rsvpToEvent(rsvpType, eventURL, this.$graffiti, this.$graffitiSession);
       },
@@ -150,6 +164,7 @@ export async function MessageList() {
         this.editContent = undefined;
       },
     },
+
     template: await fetch("./message-list.html").then((r) => {
       console.log("success message list");
       return r.text();
