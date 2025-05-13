@@ -79,6 +79,7 @@ const app = createApp({
      * @param {*} manual form
      */
     async createProfile(manual) {
+      console.log("creating profile");
       const hasProfile = await this.hasProfile();
       if (hasProfile) throw new Error("profile already exists!");
 
@@ -230,8 +231,8 @@ const app = createApp({
       this.$router.push("/");
     };
 
-    this.$graffiti.sessionEvents.addEventListener("initialized", afterLogin, { once: true });
-    // this.$graffiti.sessionEvents.addEventListener("login", afterLogin);
+    // this.$graffiti.sessionEvents.addEventListener("initialized", afterLogin, { once: true });
+    this.$graffiti.sessionEvents.addEventListener("login", afterLogin);
     this.graffitiAfterLogin = afterLogin;
   },
   beforeUnmount() {
@@ -278,25 +279,3 @@ export async function groupFromId(groupId, graffiti) {
   console.log(groupsArray[0].object.value.object);
   return groupsArray[0];
 }
-
-// export async function profileFromId(actorId, graffiti, value) {
-//   const profileSchema = {
-//     required: ["value"],
-//     properties: {
-//       activity: { type: "string", const: "Create" },
-//       type: { type: "string", const: "Profile" },
-//       describes: { type: "string" },
-//       name: { type: "string" },
-//     },
-//   };
-
-//   const profileStream = graffiti.discover([actorId], profileSchema);
-//   const profileArray = await Array.fromAsync(profileStream);
-//   if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
-//   if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
-//   console.log(profileArray[0]);
-//   console.log(profileArray[0].value?.name);
-//   console.log(profileArray[0].object?.value?.name);
-//   if (value === undefined) return profileArray[0];
-//   if (value === "name") return profileArray[0].object.value.name;
-// }
