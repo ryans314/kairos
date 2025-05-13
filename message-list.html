@@ -109,9 +109,9 @@
                   <span class="rsvpSection" :id="'rsvp-'+i">
                     <button @click.stop="openRsvpPanel(i)" class="rsvpButton">RSVP</button>
                     <div class="rsvpSelection">
-                      <p @click="rsvp('Yes', object.url)">Yes</p>
-                      <p @click="rsvp('No', object.url)">No</p>
-                      <p @click="rsvp('Maybe', object.url)">Maybe</p>
+                      <p @click="rsvp('Yes', object.url, i)">Yes</p>
+                      <p @click="rsvp('No', object.url, i)">No</p>
+                      <p @click="rsvp('Maybe', object.url, i)">Maybe</p>
                     </div>
                   </span>
                 </div>
@@ -120,14 +120,14 @@
                 </div>
               </div>
               <span class="controlButtons">
-                <button @click="startEdit(object)">Edit</button>
+                <!-- <button @click="startEdit(object)">Edit</button> -->
                 <button @click="deleteMessage(object)">Delete</button>
               </span>
             </div>
           </div>
         </div>
 
-        <!-- SOMEONE ELSES MESSAGE -->
+        <!-- SOMEONE ELSES EVENT -->
         <div v-else class="otherMessage">
           <div class="messageContainer">
             <div class="sender">
@@ -142,9 +142,9 @@
                 <span class="rsvpSection" :id="'rsvp-'+i">
                   <button @click.stop="openRsvpPanel(i)" class="rsvpButton">RSVP</button>
                   <div class="rsvpSelection">
-                    <p @click="rsvp('Yes', object.url)">Yes</p>
-                    <p @click="rsvp('No', object.url)">No</p>
-                    <p @click="rsvp('Maybe', object.url)">Maybe</p>
+                    <p @click="rsvp('Yes', object.url, i)">Yes</p>
+                    <p @click="rsvp('No', object.url, i)">No</p>
+                    <p @click="rsvp('Maybe', object.url, i)">Maybe</p>
                   </div>
                 </span>
               </div>

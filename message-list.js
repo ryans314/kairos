@@ -102,7 +102,10 @@ export async function MessageList() {
         const rsvpSection = document.getElementById("rsvp-" + i);
         rsvpSection.classList.toggle("rsvping");
       },
-      async rsvp(rsvpType, eventURL) {
+      async rsvp(rsvpType, eventURL, i) {
+        const rsvpButton = document.querySelector(`#rsvp-${i} .rsvpButton`);
+        rsvpButton.textContent = `RSVP: ${rsvpType}`;
+        console.log(rsvpButton);
         rsvpToEvent(rsvpType, eventURL, this.$graffiti, this.$graffitiSession);
       },
       getTime(dateStr) {
