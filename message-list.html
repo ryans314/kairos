@@ -101,7 +101,7 @@
               <p></p>
             </div>
             <div class="messageRow">
-              <div class="messageBody">
+              <div class="messageBody eventBody">
                 <div class="messageContent">
                   <h3>{{object.value.object.name}}</h3>
                   <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
@@ -134,7 +134,7 @@
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
-            <div class="messageBody">
+            <div class="messageBody eventBody">
               <div class="messageContent">
                 <h3>{{object.value.object.name}}</h3>
                 <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>

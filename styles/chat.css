@@ -29,6 +29,10 @@ footer fieldset {
   flex-grow: 1;
 }
 
+.eventBody {
+  background-color: hsl(210, 50%, 78%);
+}
+
 .messageContainer {
   display: flex;
   flex-direction: column;
