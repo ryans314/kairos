@@ -199,6 +199,7 @@ const app = createApp({
         this.$graffiti.discover([actor], {
           properties: {
             value: {
+              required: ["type"],
               properties: {
                 type: {
                   type: "string",
