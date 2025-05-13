@@ -15,6 +15,7 @@
 
 .creating #backgroundCover {
   z-index: 100000000000;
+  pointer-events: all;
   opacity: 1;
 }
 #newGroupFrame {
