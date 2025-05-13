@@ -279,24 +279,24 @@ export async function groupFromId(groupId, graffiti) {
   return groupsArray[0];
 }
 
-export async function profileFromId(actorId, graffiti, value) {
-  const profileSchema = {
-    required: ["value"],
-    properties: {
-      activity: { type: "string", const: "Create" },
-      type: { type: "string", const: "Profile" },
-      describes: { type: "string" },
-      name: { type: "string" },
-    },
-  };
+// export async function profileFromId(actorId, graffiti, value) {
+//   const profileSchema = {
+//     required: ["value"],
+//     properties: {
+//       activity: { type: "string", const: "Create" },
+//       type: { type: "string", const: "Profile" },
+//       describes: { type: "string" },
+//       name: { type: "string" },
+//     },
+//   };
 
-  const profileStream = graffiti.discover([actorId], profileSchema);
-  const profileArray = await Array.fromAsync(profileStream);
-  if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
-  if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
-  console.log(profileArray[0]);
-  console.log(profileArray[0].value?.name);
-  console.log(profileArray[0].object?.value?.name);
-  if (value === undefined) return profileArray[0];
-  if (value === "name") return profileArray[0].object.value.name;
-}
+//   const profileStream = graffiti.discover([actorId], profileSchema);
+//   const profileArray = await Array.fromAsync(profileStream);
+//   if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
+//   if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
+//   console.log(profileArray[0]);
+//   console.log(profileArray[0].value?.name);
+//   console.log(profileArray[0].object?.value?.name);
+//   if (value === undefined) return profileArray[0];
+//   if (value === "name") return profileArray[0].object.value.name;
+// }

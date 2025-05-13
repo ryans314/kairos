@@ -22,7 +22,7 @@
         <!-- Current Actor's Message -->
         <div class="ownMessage" v-if="object.actor===$graffitiSession.value.actor">
           <!-- editing message -->
-          <div class="messageContainer" v-if="object.url === messageToEdit">
+          <div class="messageContainer editingMessage" v-if="object.url === messageToEdit">
             <div class="sender">
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>

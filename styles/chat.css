@@ -37,7 +37,7 @@ footer fieldset {
   max-width: min(60ch, 60%);
   justify-content: space-between;
   /* background-color: white; */
-  margin-bottom: 2lh;
+  margin-bottom: 0.5lh;
 }
 
 .sender {
@@ -61,6 +61,17 @@ footer fieldset {
 .messageContainer .controlButtons {
   flex-basis: 0;
   flex-grow: 0.1;
+  margin-bottom: 0lh;
+  max-height: 0px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.messageContainer:hover .controlButtons,
+.editingMessage .controlButtons {
+  max-height: none;
+  opacity: 1;
+  pointer-events: all;
 }
 
 .ownMessage {
