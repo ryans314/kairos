@@ -27,18 +27,20 @@
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
-            <div class="messageBody">
-              <div class="messageContent">
-                <input type="text" v-model="editContent" />
+            <div class="messageRow">
+              <div class="messageBody">
+                <div class="messageContent">
+                  <input type="text" v-model="editContent" />
+                </div>
+                <div class="messageTime">
+                  <time-stamp type="message" :object="object"></time-stamp>
+                </div>
               </div>
-              <div class="messageTime">
-                <time-stamp type="message" :object="object"></time-stamp>
-              </div>
+              <span class="controlButtons">
+                <button @click="finishEdit(object)">Submit</button>
+                <button @click="cancelEdit()">Cancel</button>
+              </span>
             </div>
-            <span class="controlButtons">
-              <button @click="finishEdit(object)">Submit</button>
-              <button @click="cancelEdit()">Cancel</button>
-            </span>
           </div>
 
           <!-- non-editing message -->
@@ -47,18 +49,20 @@
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
-            <div class="messageBody">
-              <div class="messageContent">
-                <p>{{object.value.content}}</p>
+            <div class="messageRow">
+              <div class="messageBody">
+                <div class="messageContent">
+                  <p>{{object.value.content}}</p>
+                </div>
+                <div class="messageTime">
+                  <time-stamp type="message" :object="object"></time-stamp>
+                </div>
               </div>
-              <div class="messageTime">
-                <time-stamp type="message" :object="object"></time-stamp>
-              </div>
+              <span class="controlButtons">
+                <button @click="startEdit(object)">Edit</button>
+                <button @click="deleteMessage(object)">Delete</button>
+              </span>
             </div>
-            <span class="controlButtons">
-              <button @click="startEdit(object)">Edit</button>
-              <button @click="deleteMessage(object)">Delete</button>
-            </span>
           </div>
         </div>
 
@@ -90,19 +94,25 @@
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
               <p></p>
             </div>
-            <div class="messageBody">
-              <div class="messageContent">
-                <h3>{{object.value.object.name}}</h3>
-                <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
-                <p>{{object.value.object.description}}</p>
-                <span class="controlButtons">
-                  <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
-                  <!-- <button @click="deleteMessage(object)"></button> -->
-                </span>
+            <div class="messageRow">
+              <div class="messageBody">
+                <div class="messageContent">
+                  <h3>{{object.value.object.name}}</h3>
+                  <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
+                  <p>{{object.value.object.description}}</p>
+                  <span class="">
+                    <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
+                    <!-- <button @click="deleteMessage(object)"></button> -->
+                  </span>
+                </div>
+                <div class="messageTime">
+                  <time-stamp type="message" :object="object"></time-stamp>
+                </div>
               </div>
-              <div class="messageTime">
-                <time-stamp type="message" :object="object"></time-stamp>
-              </div>
+              <span class="controlButtons">
+                <button @click="startEdit(object)">Edit</button>
+                <button @click="deleteMessage(object)">Delete</button>
+              </span>
             </div>
           </div>
         </div>
@@ -119,7 +129,7 @@
                 <h3>{{object.value.object.name}}</h3>
                 <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
                 <p>{{object.value.object.description}}</p>
-                <span class="controlButtons">
+                <span class="">
                   <button @click="" class="rsvpButton">RSVP (doesn't work yet)</button>
                   <!-- <button @click="deleteMessage(object)"></button> -->
                 </span>
