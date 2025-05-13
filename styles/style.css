@@ -173,3 +173,8 @@ box-shadow: 1px 1px 3px gray;
 #scrollButton.scrolled {
   opacity: 1;
 }
+
+.appHeader {
+  padding-left: 1em;
+  padding-right: 1em;
+}

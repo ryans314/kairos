@@ -1,12 +1,11 @@
 <header class="appHeader">
+  <router-link :to="'/'">
+    <h1>Kairos</h1>
+  </router-link>
   <span>
     <router-link :to="`/profile/${encodeURIComponent($graffitiSession.value.actor)}`">
       <img class="icon" src="assets/profile.png" href="profile.html" />
     </router-link>
-
-    <router-link :to="'/'">
-      <h1>Kairos</h1>
-    </router-link>
+    <button class="stylizedButton" @click="logout()" id="logout">Log Out</button>
   </span>
-  <button class="stylizedButton" @click="logout()" id="logout">Log Out</button>
 </header>

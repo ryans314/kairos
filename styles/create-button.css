@@ -74,12 +74,10 @@
 
 .createButton:hover {
   cursor: pointer;
-  background-color: rgba(25, 25, 255, 1);
   background-color: hsla(239, 80%, 70%, 1);
 }
 
 .createButton:active {
-  background-color: rgba(30, 30, 255, 0.8);
   background-color: hsla(239, 100%, 70%, 1);
   box-shadow: 1px 1px 7px gray;
 }
