@@ -107,7 +107,8 @@
                   <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
                   <p>{{object.value.object.description}}</p>
                   <span class="rsvpSection" :id="'rsvp-'+i">
-                    <button @click.stop="openRsvpPanel(i)" class="rsvpButton">RSVP</button>
+                    <button @click.stop="openRsvpPanel(i)" class="rsvpButton">{{getEventRSVP(object.url)}}</button>
+                    <button @click="setEvent(object.url)" class="rsvpButton">More info</button>
                     <div class="rsvpSelection">
                       <p @click="rsvp('Yes', object.url, i)">Yes</p>
                       <p @click="rsvp('No', object.url, i)">No</p>
@@ -129,6 +130,7 @@
 
         <!-- SOMEONE ELSES EVENT -->
         <div v-else class="otherMessage">
+          <!-- {{object}} -->
           <div class="messageContainer">
             <div class="sender">
               <router-link :to="`/profile/${object.actor}`"> {{getProfileFromId(object.actor, "name")}} </router-link>
@@ -140,7 +142,8 @@
                 <p>{{getTime(object.value.object.start)}} - {{getTime(object.value.object.end)}}</p>
                 <p>{{object.value.object.description}}</p>
                 <span class="rsvpSection" :id="'rsvp-'+i">
-                  <button @click.stop="openRsvpPanel(i)" class="rsvpButton">RSVP</button>
+                  <button @click.stop="openRsvpPanel(i)" class="rsvpButton">{{getEventRSVP(object.url)}}</button>
+                  <button @click="setEvent(object.url)" class="rsvpButton">More info</button>
                   <div class="rsvpSelection">
                     <p @click="rsvp('Yes', object.url, i)">Yes</p>
                     <p @click="rsvp('No', object.url, i)">No</p>
@@ -158,4 +161,89 @@
     </div>
   </div>
 </graffiti-discover>
+
+<div v-if="eventId !== '' && eventObject !== undefined" id="eventBackgroundCover">
+  <div id="eventFrame">
+    <button class="closeButton" @click="unsetEvent()">X</button>
+    <h2>{{eventObject.object.value.object.name}}</h2>
+    <p>Start Time: {{getTime(eventObject.object.value.object.start)}}</p>
+    <p>End Time: {{getTime(eventObject.object.value.object.end)}}</p>
+    <p>Description: {{eventObject.object.value.object.description}}</p>
+    <div class="rsvpLists">
+      <h3>Yes</h3>
+      <graffiti-discover
+        id="rsvpYes"
+        v-slot="{objects: yesRSVPs}"
+        :channels="[eventId]"
+        :schema="{
+        properties: {
+          value: {
+            properties: {
+              type: {const: 'RSVP'},
+              rsvpType: {const: 'Yes'}
+            }
+          }
+        }
+      }"
+      >
+        <!-- {{yesRSVPs}} {{eventId}} {{eventObject}} -->
+        <ul>
+          <li v-for="yesRSVP of yesRSVPs">
+            <router-link :to="`/profile/${yesRSVP.actor}`">{{getProfileFromId(yesRSVP.actor, "name")}}</router-link>
+          </li>
+        </ul>
+      </graffiti-discover>
+
+      <h3>No</h3>
+      <graffiti-discover
+        id="rsvpNo"
+        v-slot="{objects: noRSVPs}"
+        :channels="[eventId]"
+        :schema="{
+        properties: {
+          value: {
+            properties: {
+              type: {const: 'RSVP'},
+              rsvpType: {const: 'No'}
+            }
+          }
+        }
+      }"
+      >
+        <!-- {{yesRSVPs}} {{eventId}} {{eventObject}} -->
+        <ul>
+          <li v-for="noRSVP of noRSVPs">
+            <router-link :to="`/profile/${noRSVP.actor}`">{{getProfileFromId(noRSVP.actor, "name")}}</router-link>
+          </li>
+        </ul>
+      </graffiti-discover>
+
+      <h3>Maybe</h3>
+      <graffiti-discover
+        id="rsvpMaybe"
+        v-slot="{objects: maybeRSVPs}"
+        :channels="[eventId]"
+        :schema="{
+        properties: {
+          value: {
+            properties: {
+              type: {const: 'RSVP'},
+              rsvpType: {const: 'Maybe'}
+            }
+          }
+        }
+      }"
+      >
+        <!-- {{yesRSVPs}} {{eventId}} {{eventObject}} -->
+        <ul>
+          <li v-for="maybeRSVP of maybeRSVPs">
+            <router-link :to="`/profile/${maybeRSVP.actor}`">{{getProfileFromId(maybeRSVP.actor, "name")}}</router-link>
+          </li>
+        </ul>
+      </graffiti-discover>
+    </div>
+  </div>
+</div>
+
+<!-- <event-popup v-if="eventToView !== ''" eventId="eventToView"></event-popup> -->
 <button id="scrollButton" @click="scroll()">You're viewing older messages. Jump to present?</button>

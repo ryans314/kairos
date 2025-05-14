@@ -15,6 +15,7 @@ import { CreateButton } from "./components/create-button.js";
 import { HeaderBar } from "./header-bar.js";
 import { ChatHeader } from "./chat-header.js";
 import { CreateEvent } from "./components/create-event.js";
+// import { EventPopup } from "./components/event-popup.js";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -249,6 +250,7 @@ const app = createApp({
   .component("TimeStamp", TimeStamp)
   .component("CreateButton", CreateButton)
   .component("CreateEvent", CreateEvent)
+  // .component("EventPopup", EventPopup)
   .mount("#app");
 
 export async function groupFromId(groupId, graffiti) {
@@ -282,7 +284,7 @@ export async function groupFromId(groupId, graffiti) {
 }
 
 export async function rsvpToEvent(rsvpType, eventURL, graffiti, graffitiSession) {
-  console.log(graffitiSession);
+  console.log("CALLING RSVP TO EVENT");
   if (!["Yes", "No", "Maybe"].includes(rsvpType)) {
     throw new Error(`${rsvpType} is not a valid rsvp response`);
   }
@@ -339,6 +341,7 @@ export async function rsvpToEvent(rsvpType, eventURL, graffiti, graffitiSession)
   } else {
     console.log("PUTTING RSVP");
     // console.log(graffitiSession.value.actor);
+    console.log(eventURL);
     graffiti.put(
       {
         value: {

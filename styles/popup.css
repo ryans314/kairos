@@ -1,0 +1,44 @@
+#eventBackgroundCover {
+  /* z-index: 0; */
+  /* display: content; */
+  position: fixed;
+  /* height: 0px; */
+  /* opacity: 0; */
+  top: 0%;
+  left: 0%;
+  /* transition: opacity 200ms ease, z-index 500ms; */
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 1000vw;
+  height: 1000vh;
+  /* pointer-events: none; */
+}
+#eventBackgroundCover {
+  z-index: 100000000000;
+  pointer-events: all;
+  opacity: 1;
+}
+#eventFrame {
+  pointer-events: none;
+  /* transform: scale(0); */
+  opacity: 0;
+  transition: opacity 200ms;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 70vh;
+  max-width: 700px;
+  background-color: #bbbbbb;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  box-shadow: 1px 1px 10px black;
+  padding: 1em;
+}
+#eventFrame {
+  opacity: 1;
+  pointer-events: all;
+  /* transition: opacity 500ms; */
+}
+
+.closeButton {
+  margin-left: 95%;
+}

@@ -21,6 +21,9 @@ export async function MessageList() {
         messageToEdit: undefined,
         editContent: "",
         actorToProfile: {},
+        eventId: "",
+        eventObject: undefined,
+        eventToRSVP: {},
       };
     },
     async mounted() {
@@ -58,6 +61,25 @@ export async function MessageList() {
         const id = profile.object.value.describes;
         this.actorToProfile[id] = name;
       }
+
+      const rsvpSchema = {
+        properties: {
+          value: {
+            required: ["activity", "type"],
+            properties: {
+              activity: { const: "Create" },
+              type: { const: "RSVP" },
+            },
+          },
+        },
+      };
+      console.log(this.$graffitiSession.value.actor);
+      const rsvpStream = this.$graffiti.discover([this.$graffitiSession.value.actor], rsvpSchema);
+      const rsvpArray = await Array.fromAsync(rsvpStream);
+      console.log("RSVPs on load:", rsvpArray);
+      for (const rsvp of rsvpArray) {
+        this.eventToRSVP[rsvp.object.value.eventURL] = rsvp.object.value.rsvpType;
+      }
       // if (profileArray.length > 1) console.warn("user has more than 1 profile! Profiles: ", profiles);
       // if (profileArray.length === 0) console.warn("user does not have a profile: ", profiles);
 
@@ -92,21 +114,50 @@ export async function MessageList() {
       // const messages = Array.fromAsync(messageStream);
       // this.messageObjects = messages;
       // this.isInitialPolling = false;
-      await new Promise((r) => setTimeout(r, 1000));
+
+      await new Promise((r) => setTimeout(r, 500));
       // console.log("scrolling to: " + document.body.scrollHeight);
       window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
       // // }
     },
     methods: {
+      async getEventToDisplay() {
+        const eventId = this.eventId;
+        const eventStream = this.$graffiti.discover([this.chatId], {
+          required: ["url"],
+          properties: {
+            url: { const: eventId },
+          },
+        });
+        const eventArray = await Array.fromAsync(eventStream);
+        console.log("event array is ", eventArray);
+        this.eventObject = eventArray[0];
+      },
+      setEvent(eventId) {
+        console.log("setting event to: ", eventId);
+        this.eventId = eventId;
+        this.getEventToDisplay();
+      },
+      unsetEvent() {
+        this.eventId = "";
+        this.eventObject = undefined;
+      },
       openRsvpPanel(i) {
         const rsvpSection = document.getElementById("rsvp-" + i);
         rsvpSection.classList.toggle("rsvping");
       },
+      getEventRSVP(eventURL) {
+        if (eventURL in this.eventToRSVP) {
+          return "RSVP: " + this.eventToRSVP[eventURL];
+        }
+        return "RSVP";
+      },
       async rsvp(rsvpType, eventURL, i) {
         const rsvpButton = document.querySelector(`#rsvp-${i} .rsvpButton`);
-        rsvpButton.textContent = `RSVP: ${rsvpType}`;
+        // rsvpButton.textContent = `RSVP: ${rsvpType}`;
         console.log(rsvpButton);
         rsvpToEvent(rsvpType, eventURL, this.$graffiti, this.$graffitiSession);
+        this.eventToRSVP[eventURL] = rsvpType;
       },
       getTime(dateStr) {
         const date = new Date(dateStr);
